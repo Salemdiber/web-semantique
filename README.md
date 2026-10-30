@@ -1,4 +1,4 @@
-# Si Educational Free NextJs Landing Page Template
+# Si Educational Free ReactJS Landing Page Template
 
 > 🧠 **Intégration sémantique** : le catalogue des cours (front + back-office) est
 > alimenté par l'ontologie OWL Éducation & Formation via FastAPI + SPARQL + Apache
