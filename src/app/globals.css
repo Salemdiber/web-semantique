@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --shadow-mentor-shadow: 0px 4px 20px rgba(110, 127, 185, 0.1);
+
+  --inset-54\%: 54%;
+
+  --color-primary: #611f69;
+  --color-cream: #fcf5ef;
+  --color-success: #6b9f36;
+  --color-orange: #f9cd92;
+}
+
+.bg-banner-image {
+  background-image: var(--banner-url);
+}
+
+.bg-newsletter {
+  background-image: var(--newsletter-url);
+}
+
+.boxshadow {
+  box-shadow: var(--shadow-mentor-shadow);
+}
+
+.section-tb {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.bg-orange {
+  background-color: var(--color-orange);
+}
+
+.text-muted {
+  color: #64748b;
+}
+
+.text-dark {
+  color: #1e293b;
+}
+
+.dark_border {
+  border-color: #e2e8f0;
+}
+
+.text-darkmode {
+  color: #ffffff;
+}
+
+.text-body-color {
+  color: #64748b;
+}
+
+.text-dark-6 {
+  color: #94a3b8;
+}
+
+.border-stroke {
+  border-color: #e2e8f0;
+}
+
+.dark-3 {
+  color: #334155;
+}
+
+.bg-dark_grey {
+  background-color: #f8f9fa;
+}
+
+.outline-hidden {
+  outline: none;
+}
+
+.text-18 {
+  font-size: 1.125rem;
+}
+
+.fs-9 {
+  font-size: 0.875rem;
+}
+
+.ms-4 {
+  margin-left: 1rem;
+}
+
+.text-midnight_text {
+  color: #1e293b;
+}
+
+.md-text-21 {
+  font-size: 1.3125rem;
+}
+
+.bg-emailbg {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.text-lightgrey {
+  color: #9ca3af;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  section {
+    @apply py-14
+  }
+
+  h1 {
+    @apply text-black md:text-7xl sm:text-6xl text-5xl
+  }
+
+  h2 {
+    @apply text-black sm:text-5xl text-4xl
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply max-w-7xl mx-auto w-full px-4;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}

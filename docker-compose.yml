@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  fuseki:
+    image: stain/jena-fuseki:latest
+    container_name: fuseki-education
+    ports:
+      - "3030:3030"
+    environment:
+      # Interface web : http://localhost:3030 (utilisateur "admin")
+      - ADMIN_PASSWORD=admin
+      - JVM_ARGS=-Xmx1g
+    volumes:
+      # Dataset "education" avec raisonneur OWL (fuseki/config.ttl lu par fuseki-server)
+      - ./fuseki/config.ttl:/fuseki/config.ttl
+      # Données + config internes persistantes (Dockerfile de l'image : VOLUME /fuseki)
+      - fuseki-data:/fuseki
+    restart: unless-stopped
+
+volumes:
+  fuseki-data:
