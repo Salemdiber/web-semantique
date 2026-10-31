@@ -21,14 +21,12 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 const STORAGE_KEY = 'si-education-theme';
 
-const readInitialTheme = (): Theme => {
-    if (typeof window === 'undefined') return 'light';
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark') return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
-};
+/**
+ * La landing est conçue uniquement en thème clair : on ignore la préférence
+ * système (et un ancien choix stocké), sinon la classe `dark` assombrit des
+ * sections qui n'ont pas de fond propre.
+ */
+const readInitialTheme = (): Theme => 'light';
 
 /**
  * Gestion du theme clair/sombre.

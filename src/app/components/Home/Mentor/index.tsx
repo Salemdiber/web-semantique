@@ -1,74 +1,111 @@
-import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
-import { MentorType } from '@/app/types/mentor'
-import withBasePath from '@/utils/basePath'
-import MentorSkeleton from '../../Skeleton/Mentor'
+
+const API_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api'
+
+interface Formateur {
+    id: string
+    prenom: string
+    domaine: string
+    cours: string[]
+}
 
 const Mentor = () => {
-    const [mentor, setMentor] = useState<MentorType[]>([])
+    const [formateurs, setFormateurs] = useState<Formateur[]>([])
     const [loading, setLoading] = useState(true)
+    const [erreur, setErreur] = useState('')
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch(withBasePath('/data/data.json'))
-                if (!res.ok) throw new Error('Failed to fetch')
-                const data = await res.json()
-                setMentor(data.MentorData)
-            } catch (error) {
-                console.error('Error fetching services:', error)
-            } finally {
-                setLoading(false)
-            }
+        let actif = true
+        fetch(`${API_URL}/education/formateurs`)
+            .then((reponse) => {
+                if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`)
+                return reponse.json()
+            })
+            .then((donnees: Formateur[]) => {
+                if (actif) setFormateurs(donnees)
+            })
+            .catch(() => {
+                if (actif) setErreur('Les formateurs sont momentanément indisponibles.')
+            })
+            .finally(() => {
+                if (actif) setLoading(false)
+            })
+        return () => {
+            actif = false
         }
-        fetchData()
     }, [])
+
+    const initiales = (nom: string) =>
+        nom
+            .split(/\s+/)
+            .map((mot) => mot[0])
+            .filter(Boolean)
+            .slice(0, 2)
+            .join('')
+            .toUpperCase()
 
     return (
         <section id='mentors-section' className='py-14 bg-cream'>
             <div className='container'>
-                <div className='flex flex-col sm:flex-row gap-5 justify-between sm:items-center mb-12'>
-                    <h2 className='font-bold tracking-tight text-gray-900'>Meet with our Mentors</h2>
-                    <div>
-                        <button className='bg-transparent cursor-pointer hover:bg-primary text-primary font-medium hover:text-white py-3 px-4 border border-primary hover:border-transparent rounded-sm duration-300'>
-                            Explore 10+ our Mentor
-                        </button>
-                    </div>
+                <div className='mb-10'>
+                    <h2 className='font-bold tracking-tight text-gray-900'>
+                        Nos formateurs
+                    </h2>
+                    <p className='mt-2 text-gray-600'>
+                        Les formateurs et leurs domaines, tels qu'enregistrés dans
+                        l'ontologie.
+                    </p>
                 </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6  xl:gap-8'>
-                    {loading
-                        ? Array.from({ length: 6 }).map((_, i) => (
-                            <MentorSkeleton key={i} />
-                        ))
-                        : mentor.map((item, index) => (
-                            <div key={index} className='group relative shadow-lg'>
-                                <div className='min-h-80 w-full overflow-hidden rounded-lg bg-gray-200 lg:h-80'>
-                                    <img
-                                        src={withBasePath(item.imageSrc)}
-                                        alt={item.imageAlt}
-                                        width={700}
-                                        height={700}
-                                        className='h-full w-full object-cover object-center lg:h-full lg:w-full '
-                                    />
-                                </div>
-                                <div className='my-4 flex justify-center '>
+                {loading ? (
+                    <p className='text-gray-600'>Chargement des formateurs…</p>
+                ) : erreur ? (
+                    <p className='text-gray-600'>{erreur}</p>
+                ) : formateurs.length === 0 ? (
+                    <p className='text-gray-600'>Aucun formateur enregistré.</p>
+                ) : (
+                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8'>
+                        {formateurs.map((formateur) => (
+                            <div
+                                key={formateur.id}
+                                className='rounded-xl bg-white shadow-lg p-6 flex flex-col gap-4'>
+                                <div className='flex items-center gap-4'>
+                                    <span className='h-12 w-12 rounded-full bg-primary text-white font-semibold flex items-center justify-center'>
+                                        {initiales(formateur.prenom)}
+                                    </span>
                                     <div>
-                                        <div className='border border-white rounded-lg -mt-8 bg-white p-2 boxshadow flex items-center justify-center'>
-                                            <Link
-                                                to='/'
-                                                className='text-sm text-gray-700 text-center'>
-                                                {item.name}
-                                            </Link>
-                                        </div>
-                                        <p className='mt-3 text-2xl font-semibold text-gray-900 text-center'>
-                                            {item.color}
+                                        <p className='text-lg font-semibold text-gray-900'>
+                                            {formateur.prenom}
+                                        </p>
+                                        <p className='text-sm text-gray-600'>
+                                            {formateur.domaine}
                                         </p>
                                     </div>
                                 </div>
+                                <div>
+                                    <p className='text-sm font-medium text-gray-700 mb-2'>
+                                        Cours enseignés
+                                    </p>
+                                    {formateur.cours.length > 0 ? (
+                                        <div className='flex flex-wrap gap-2'>
+                                            {formateur.cours.map((cours) => (
+                                                <span
+                                                    key={cours}
+                                                    className='rounded-full bg-cream px-3 py-1 text-xs font-medium text-gray-700'>
+                                                    {cours}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className='text-sm text-gray-500'>
+                                            Aucun cours associé
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         ))}
-                </div>
+                    </div>
+                )}
             </div>
         </section>
     )

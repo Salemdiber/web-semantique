@@ -656,6 +656,95 @@
     
 
 
+    <!-- http://example.org/education-formation#CertificationCompetence -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CertificationCompetence">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Certification de compétence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#nomEvaluation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom de l&apos;évaluation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#dateEvaluation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#dateEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Date de l&apos;évaluation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMaximale -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMaximale">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note maximale</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMinimaleReussite -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMinimaleReussite">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note minimale de réussite</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteObtenue -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteObtenue">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note obtenue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMinimaleCertification -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMinimaleCertification">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Condition d&apos;obtention (note minimale)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#certifieCompetence -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#certifieCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Compétence certifiée</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#certifieEvaluation -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#certifieEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:label xml:lang="fr">Évaluation associée à la certification</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -905,6 +994,27 @@
         <niveau>2ème année</niveau>
         <prenom>Sara</prenom>
     </owl:NamedIndividual>
+
+    <!-- http://example.org/education-formation#compte_4 -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#compte_4">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <email>slimdiber@gmail.com</email>
+        <nom>salem diber</nom>
+        <prenom>salem diber</prenom>
+        <rdfs:label xml:lang="fr">salem diber</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- http://example.org/education-formation#compte_10 -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#compte_10">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formateur"/>
+        <email>formateur@gmail.com</email>
+        <nom>salem formateur</nom>
+        <prenom>salem formateur</prenom>
+        <rdfs:label xml:lang="fr">salem formateur</rdfs:label>
+    </owl:NamedIndividual>
+
 </rdf:RDF>
 
 

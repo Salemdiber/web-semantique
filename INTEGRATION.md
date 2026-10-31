@@ -79,6 +79,12 @@ Endpoints principaux (préfixe `/api`) :
 | `GET /api/education/programmes`   | programmes pédagogiques + formations               |
 | `GET /api/education/parcours`     | parcours d'apprentissage + cours                   |
 | `GET /api/education/evaluations`  | examens et quiz                                    |
+| `GET /api/education/mes-evaluations` | évaluations et quiz de l'étudiant connecté (Bearer) |
+| `GET /api/education/quiz/{id}`     | questionnaire d'un quiz attribué (Bearer étudiant)  |
+| `POST /api/education/quiz/{id}/soumettre` | correction automatique + note (Bearer étudiant) |
+| `GET /api/education/quiz/{id}/questions` | questionnaire complet (admin/formateur)      |
+| `PUT /api/education/quiz/{id}/questions` | remplace le questionnaire (admin/formateur) |
+| `DELETE /api/education/quiz/{id}/tentatives` | réinitialise les tentatives (admin/formateur) |
 | `GET /api/education/certifications`| certifications + organismes                       |
 | `GET /api/education/statistiques` | compteurs par classe (rdfs:subClassOf utilisés)    |
 | `GET /api/education/hierarchie`   | arbre des classes OWL                              |
@@ -125,4 +131,9 @@ d'accueil après la section des cours statiques. Configurable via
 - Le client SPARQL (`backend/app/sparql_client.py`) utilise `SPARQLWrapper` et renvoie
   les URIs **en nom local** (`#Angular` → `Angular`).
 - Le OWL est chargé via le protocole Graph Store (PUT `?graph=urn:default`).
+- **Quiz** : les questions, choix et tentatives sont stockés dans SQLite
+  (`quiz_questions`, `quiz_tentatives`). La note d'un quiz n'est jamais saisie à
+  la main : elle est calculée à la soumission puis écrite dans
+  `edu:noteObtenue`. Sans tentative, l'évaluation reste « à faire » même si une
+  ancienne note existe.
 - CORS ouvert sur `http://localhost:3000` (Next.js) et `http://localhost:5173` (Vite).

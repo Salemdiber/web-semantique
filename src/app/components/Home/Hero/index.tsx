@@ -1,99 +1,101 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import Dropdownone from './Dropdownone'
-import Dropdowntwo from './Dropdowntwo'
-import withBasePath from '@/utils/basePath'
+import { useSession } from '@/utils/session'
+
+const API_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api'
+const DASHBOARD_URL: string =
+    import.meta.env.VITE_DASHBOARD_URL ?? 'http://localhost:5173'
+
+interface Statistique {
+    classe: string
+    nom: string
+    nombre: number
+}
+
+const INDICATEURS = [
+    { classe: 'Cours', libelle: 'cours' },
+    { classe: 'Etudiant', libelle: 'étudiants' },
+    { classe: 'Formateur', libelle: 'formateurs' },
+    { classe: 'Certification', libelle: 'certifications' },
+]
 
 const Banner = () => {
+    const [statistiques, setStatistiques] = useState<Statistique[]>([])
+    const { utilisateur, chargement } = useSession()
+
+    useEffect(() => {
+        let actif = true
+        fetch(`${API_URL}/education/statistiques`)
+            .then((reponse) => (reponse.ok ? reponse.json() : []))
+            .then((donnees: Statistique[]) => {
+                if (actif) setStatistiques(donnees)
+            })
+            .catch(() => {
+                /* indicateurs masqués si l'API est indisponible */
+            })
+        return () => {
+            actif = false
+        }
+    }, [])
+
+    const compteur = (classe: string) =>
+        statistiques.find((s) => s.classe === classe)?.nombre
+
     return (
         <section id='Home' className='bg-banner-image pt-28 pb-20'>
             <div className='relative px-6 lg:px-8'>
                 <div className='container'>
-                    <div className='flex flex-col gap-4 text-center'>
+                    <div className='flex flex-col gap-5 text-center'>
+                        <span className='mx-auto rounded-full bg-white/60 px-4 py-1.5 text-sm font-medium text-primary'>
+                            Ontologie OWL · SPARQL · Jena Fuseki
+                        </span>
                         <h1 className='leading-tight font-bold tracking-tight max-w-4xl mx-auto text-gray-900'>
-                            Advance your engineering skills with our courses
+                            La plateforme Éducation &amp; Formation
                         </h1>
-                        <p className='text-lg leading-8 text-gray-700'>
-                            Build skills with our courses and mentor from world-class
-                            companies.
+                        <p className='text-lg leading-8 text-gray-700 max-w-2xl mx-auto'>
+                            Cours, formateurs, compétences et certifications issus
+                            d'une ontologie OWL interrogeable en SPARQL.
                         </p>
-                        <div className='backdrop-blur-md bg-white/30 border border-white/30 rounded-lg shadow-lg p-6 w-fit mx-auto'>
-                            <div className='flex items-center justify-center gap-8'>
-                                <div className='hidden sm:block -space-x-2 overflow-hidden'>
-                                    <img
-                                        className='inline-block h-12 w-12 rounded-full ring-2 ring-white'
-                                        src='https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                                        alt='img1'
-                                        width={12}
-                                        height={12}
-                                    />
 
-                                    <img
-                                        className='inline-block h-12 w-12 rounded-full ring-2 ring-white'
-                                        src='https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                                        alt='img2'
-                                        width={12}
-                                        height={12}
-                                    />
-                                    <img
-                                        className='inline-block h-12 w-12 rounded-full ring-2 ring-white'
-                                        src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-                                        alt='img3'
-                                        width={12}
-                                        height={12}
-                                    />
-                                    <img
-                                        className='inline-block h-12 w-12 rounded-full ring-2 ring-white'
-                                        src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                                        alt='img4'
-                                        width={12}
-                                        height={12}
-                                    />
-                                    <img
-                                        className='inline-block h-12 w-12 rounded-full ring-2 ring-white'
-                                        src='https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                                        alt='img5'
-                                        width={12}
-                                        height={12}
-                                    />
-                                </div>
-                                <div>
-                                    <div className='flex justify-center sm:justify-start'>
-                                        <h3 className='text-2xl font-semibold mr-2 text-gray-900'>4.6</h3>
-                                        <img
-                                            src={withBasePath('/images/banner/Stars.svg')}
-                                            alt='stars-icon'
-                                            width={32}
-                                            height={32}
-                                            className='w-[60%]'
-                                        />
-                                    </div>
-                                    <div>
-                                        <h3 className='text-sm text-gray-700'>Rated by 25k on google.</h3>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className='flex flex-wrap justify-center gap-3 pt-2'>
+                            <Link
+                                to='/#catalogue-ontologie'
+                                className='bg-primary text-white font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-transparent hover:text-primary duration-300'>
+                                Explorer les cours
+                            </Link>
+                            {!chargement &&
+                                (utilisateur ? (
+                                    <a
+                                        href={DASHBOARD_URL}
+                                        className='bg-white/70 text-primary font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-primary hover:text-white duration-300'>
+                                        Mon tableau de bord
+                                    </a>
+                                ) : (
+                                    <a
+                                        href={`${DASHBOARD_URL}/auth/auth2/login`}
+                                        className='bg-white/70 text-primary font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-primary hover:text-white duration-300'>
+                                        Se connecter
+                                    </a>
+                                ))}
                         </div>
                     </div>
 
-                    {/* DROPDOWN BUTTONS */}
-
-                    <div className='mx-auto max-w-4xl mt-12 p-6 lg:max-w-4xl lg:px-8 bg-white rounded-lg boxshadow'>
-                        <div className='grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-8 xl:gap-x-8'>
-                            <div className='col-span-3'>
-                                <Dropdownone />
-                            </div>
-                            <div className='col-span-3'>
-                                <Dropdowntwo />
-                            </div>
-                            <div className='col-span-3 sm:col-span-2 mt-2'>
-                                <Link to={'/#courses-section'}>
-                                    <button className='bg-primary w-full hover:bg-transparent hover:text-primary duration-300 border border-primary text-white font-bold py-4 px-3 rounded-sm hover:cursor-pointer'>
-                                        Start
-                                    </button>
-                                </Link>
-                            </div>
+                    {statistiques.length > 0 && (
+                        <div className='mx-auto max-w-3xl mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4'>
+                            {INDICATEURS.map((indicateur) => (
+                                <div
+                                    key={indicateur.classe}
+                                    className='rounded-lg bg-white/70 border border-white/40 p-4 text-center shadow-sm'>
+                                    <p className='text-2xl font-bold text-gray-900'>
+                                        {compteur(indicateur.classe) ?? '—'}
+                                    </p>
+                                    <p className='text-sm text-gray-600'>
+                                        {indicateur.libelle}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </section>

@@ -141,3 +141,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Landing en thème clair uniquement : évite un fond noir si le système est
+   en mode sombre (la couleur de canevas suit color-scheme). */
+body {
+  background-color: #ffffff;
+  color: #1e293b;
+}

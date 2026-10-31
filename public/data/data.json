@@ -6,7 +6,7 @@
         },
         {
             "label": "Courses",
-            "href": "/#Courses"
+            "href": "/#catalogue-ontologie"
         },
         {
             "label": "Mentors",
@@ -275,7 +275,7 @@
                 },
                 {
                     "label": "Courses",
-                    "href": "/#Courses"
+                    "href": "/#catalogue-ontologie"
                 },
                 {
                     "label": "Mentors",
