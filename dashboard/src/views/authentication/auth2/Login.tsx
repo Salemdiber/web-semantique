@@ -1,36 +1,32 @@
-import { Link } from "react-router";
-import CardBox from "src/components/shared/CardBox";
-
-import AuthLogin from "../authforms/AuthLogin";
-import SocialButtons from "../authforms/SocialButtons";
-
-import FullLogo from "src/layouts/full/shared/logo/FullLogo";
-
+import { Link, Navigate } from 'react-router';
+import AuthLogin from '../authforms/AuthLogin';
+import AuthShell from './AuthShell';
+import { useAuth } from 'src/context/auth-context';
 
 const Login = () => {
+  const { utilisateur, chargement } = useAuth();
+
+  // Déjà connecté : on renvoie vers le tableau de bord.
+  if (!chargement && utilisateur) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <>
-      <div className="relative overflow-hidden h-screen bg-lightprimary dark:bg-darkprimary">
-        <div className="flex h-full justify-center items-center px-4">
-          <CardBox className="md:w-[450px] w-full border-none">
-            <div className="mx-auto mb-6">
-              <FullLogo />
-            </div>
-            <SocialButtons title="or sign in with" />
-            <AuthLogin />
-            <div className="flex gap-2 text-base text-ld font-medium mt-6 items-center justify-center">
-              <p>New to TailwindAdmin?</p>
-              <Link
-                to={"/auth/auth2/register"}
-                className="text-primary text-sm font-medium"
-              >
-                Create an account
-              </Link>
-            </div>
-          </CardBox>
-        </div>
-      </div>
-    </>
+    <AuthShell
+      titre="Connexion"
+      sousTitre="Accédez à votre espace Éducation & Formation"
+    >
+      <AuthLogin />
+      <p className="mt-6 text-center text-sm text-slate-600">
+        Pas encore de compte ?{' '}
+        <Link
+          to="/auth/auth2/register"
+          className="font-semibold text-[#611f69] hover:underline"
+        >
+          Créer un compte
+        </Link>
+      </p>
+    </AuthShell>
   );
 };
 

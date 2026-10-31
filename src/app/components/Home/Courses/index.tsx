@@ -72,7 +72,7 @@ const NamesList = () => {
     }
 
     const nameElements = selectedNames.map((name, index) => (
-        <div id='Courses' key={index} className='bg-white shadow-lg rounded-xl group flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300'>
+        <div key={index} className='bg-white shadow-lg rounded-xl group flex flex-col overflow-hidden hover:shadow-xl transition-shadow duration-300'>
             <div className='py-5 lg:py-0 flex flex-col'>
                 <div className='overflow-hidden rounded-t-lg bg-gray-100'>
                     <img
@@ -128,7 +128,7 @@ const NamesList = () => {
     ))
 
     return (
-        <section id='courses-section' className='py-14 bg-cream'>
+        <section id='Courses' className='py-14 bg-cream'>
             <div className='container mx-auto max-w-7xl px-4'>
                 <div className='flex flex-col sm:flex-row justify-between sm:items-center gap-5 mb-4'>
                     <h2 className='font-bold tracking-tight text-gray-900'>Popular Courses</h2>

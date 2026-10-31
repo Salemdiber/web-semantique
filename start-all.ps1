@@ -7,7 +7,7 @@
 #   .\start-all.ps1
 #
 # Ports :
-#   3010  landing Next.js      (3000 est occupe par un autre conteneur Docker)
+#   3001  landing React/Vite   (3000 est occupé par un autre conteneur Docker)
 #   5173  back-office React/Vite
 #   8000  API FastAPI (Swagger : /docs)
 #   3030  Apache Jena Fuseki
@@ -37,10 +37,11 @@ Start-Process -FilePath (Join-Path $racine 'backend\.venv\Scripts\python.exe') `
     -RedirectStandardError  (Join-Path $logs 'api.err.log') `
     -WindowStyle Hidden | Out-Null
 
-# -------------------------------------------- Landing React/Vite (port 3010) --
-Write-Host '[START] Landing React + Vite sur http://localhost:3010 ...'
+# -------------------------------------------- Landing React/Vite (port 3001) --
+Write-Host '[START] Landing React + Vite sur http://localhost:3001 ...'
+$viteLanding = Join-Path $racine 'node_modules\vite\bin\vite.js'
 Start-Process -FilePath $node `
-    -ArgumentList (Join-Path $racine 'node_modules\vite\bin\vite.js') `
+    -ArgumentList "`"$viteLanding`"" `
     -WorkingDirectory $racine `
     -RedirectStandardOutput (Join-Path $logs 'frontend.log') `
     -RedirectStandardError  (Join-Path $logs 'frontend.err.log') `
@@ -48,8 +49,9 @@ Start-Process -FilePath $node `
 
 # ------------------------------------- Back-office Vite (port 5173) --------
 Write-Host '[START] Back-office Vite sur http://localhost:5173 ...'
+$viteDashboard = Join-Path $racine 'dashboard\node_modules\vite\bin\vite.js'
 Start-Process -FilePath $node `
-    -ArgumentList (Join-Path $racine 'dashboard\node_modules\vite\bin\vite.js'), '--port', '5173', '--strictPort' `
+    -ArgumentList "`"$viteDashboard`" --port 5173 --strictPort" `
     -WorkingDirectory (Join-Path $racine 'dashboard') `
     -RedirectStandardOutput (Join-Path $logs 'dashboard.log') `
     -RedirectStandardError  (Join-Path $logs 'dashboard.err.log') `
@@ -58,7 +60,7 @@ Start-Process -FilePath $node `
 # ------------------------------------------------------------- Verifications
 Write-Host ''
 Write-Host 'Attente du demarrage (max 90 s)...'
-$ports = 8000, 3010, 5173
+$ports = 8000, 3001, 5173
 for ($i = 0; $i -lt 90; $i++) {
     $prets = $ports | Where-Object {
         Get-NetTCPConnection -LocalPort $_ -State Listen -ErrorAction SilentlyContinue
@@ -67,7 +69,7 @@ for ($i = 0; $i -lt 90; $i++) {
     Start-Sleep -Seconds 1
 }
 
-foreach ($p in 3030, 8000, 3010, 5173) {
+foreach ($p in 3030, 8000, 3001, 5173) {
     $actif = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue
     if ($actif) {
         Write-Host ("[OK]    port {0} en ecoute (pid {1})" -f $p, $actif[0].OwningProcess)
@@ -77,7 +79,7 @@ foreach ($p in 3030, 8000, 3010, 5173) {
 }
 
 Write-Host ''
-Write-Host '  Landing      : http://localhost:3010'
+Write-Host '  Landing      : http://localhost:3001'
 Write-Host '  Back-office : http://localhost:5173/education'
 Write-Host '  API (Swagger): http://localhost:8000/docs'
 Write-Host '  Fuseki       : http://localhost:3030'

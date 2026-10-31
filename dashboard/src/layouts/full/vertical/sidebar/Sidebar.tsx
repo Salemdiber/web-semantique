@@ -1,13 +1,12 @@
 import SidebarContent from './sidebaritems';
 import SimpleBar from 'simplebar-react';
 import { Icon } from '@iconify/react';
-import rocket from 'src/assets/images/backgrounds/rocket.png';
 import FullLogo from '../../shared/logo/FullLogo';
 import { Link, useLocation } from 'react-router';
-import { Button } from 'src/components/ui/button';
 import { useTheme } from 'src/components/provider/theme-provider';
 import { AMLogo, AMMenu, AMMenuItem, AMSidebar, AMSubmenu } from 'tailwind-sidebar';
 import 'tailwind-sidebar/styles.css';
+import { useAuth } from 'src/context/auth-context';
 
 interface SidebarItemType {
   heading?: string
@@ -73,9 +72,8 @@ const renderSidebarItems = (
       : `mt-0.5 text-sidebar-foreground dark:text-sidebar-foreground`;
 
     return (
-      <div onClick={onClose}>
+      <div key={item.id} onClick={onClose}>
         <AMMenuItem
-          key={item.id}
           icon={iconElement}
           isSelected={isSelected}
           link={item.url || undefined}
@@ -99,6 +97,22 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
   const location = useLocation();
   const pathname = location.pathname;
   const { theme } = useTheme();
+  const { utilisateur } = useAuth();
+
+  // La gestion des comptes est réservée aux administrateurs ; le libellé du
+  // menu des évaluations s'adapte au rôle (vue personnelle de l'étudiant).
+  const sections = SidebarContent.map((section) => ({
+    ...section,
+    children: section.children
+      ?.filter(
+        (item) => item.url !== '/utilisateurs' || utilisateur?.role === 'admin',
+      )
+      .map((item) =>
+        item.url === '/evaluations' && utilisateur?.role === 'etudiant'
+          ? { ...item, name: 'Mes évaluations & quiz' }
+          : item,
+      ),
+  }));
 
   // Only allow "light" or "dark" for AMSidebar
   const sidebarMode = theme === 'light' || theme === 'dark' ? theme : undefined;
@@ -124,7 +138,7 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
 
       <SimpleBar className="h-[calc(100vh-100px)]">
         <div className="px-6">
-          {SidebarContent.map((section, index) => (
+          {sections.map((section, index) => (
             <div key={index}>
               {renderSidebarItems(
                 [
@@ -136,23 +150,6 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
               )}
             </div>
           ))}
-
-          {/* Promo Section */}
-          <div className="mt-9 overflow-hidden">
-            <div className="flex w-full bg-lightprimary rounded-lg p-6">
-              <div className="lg:w-1/2 w-full">
-                <h5 className="text-base text-sidebar-foreground">Haven't Account?</h5>
-                <Button className="whitespace-nowrap mt-2 text-[13px]">
-                  <a href="https://tailwind-admin.com/pricing" target="_blank" rel="noopener noreferrer">
-                    Get Pro
-                  </a>
-                </Button>
-              </div>
-              <div className="lg:w-1/2 w-full -mt-4 ml-[26px] scale-[1.2] shrink-0">
-                <img src={rocket} alt="rocket" />
-              </div>
-            </div>
-          </div>
         </div>
       </SimpleBar>
     </AMSidebar>

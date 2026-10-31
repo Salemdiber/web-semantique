@@ -1,68 +1,75 @@
 'use client';
 
-import { Icon } from '@iconify/react';
-import * as profileData from './data';
-import SimpleBar from 'simplebar-react';
-import { Link } from 'react-router';
-import profileimg from 'src/assets/images/profile/user-1.jpg';
+import { useNavigate } from 'react-router';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/dropdown-menu';
 import { Button } from 'src/components/ui/button';
+import { useAuth } from 'src/context/auth-context';
+import { LIBELLES_ROLE } from 'src/api/auth/auth-data';
 
 const Profile = () => {
+  const { utilisateur, deconnexion } = useAuth();
+  const navigate = useNavigate();
+
+  const initiales = (utilisateur?.nom ?? '?')
+    .split(/\s+/)
+    .map((mot) => mot[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  const seDeconnecter = () => {
+    deconnexion();
+    navigate('/auth/auth2/login', { replace: true });
+  };
+
   return (
     <div className="relative group/menu ps-1 sm:ps-15 shrink-0">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <span className="hover:text-primary hover:bg-lightprimary rounded-full flex justify-center items-center cursor-pointer group-hover/menu:bg-lightprimary group-hover/menu:text-primary">
-            <img src={profileimg} alt="logo" height="35" width="35" className="rounded-full" />
+            <span
+              title={utilisateur?.nom}
+              className="h-[35px] w-[35px] rounded-full bg-primary text-white text-xs font-semibold flex items-center justify-center"
+            >
+              {initiales}
+            </span>
           </span>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
           align="end"
-          className="w-screen sm:w-[200px] pb-6 pt-4 rounded-sm"
+          className="w-screen sm:w-[240px] pb-4 pt-4 rounded-sm"
         >
-          <SimpleBar>
-            {profileData.profileDD.map((items, index) => (
-              <DropdownMenuItem
-                key={index}
-                asChild
-                className="px-4 py-2 flex justify-between items-center bg-hover group/link w-full cursor-pointer"
-              >
-                <Link to={items.url}>
-                  <div className="w-full">
-                    <div className="ps-0 flex items-center gap-3 w-full">
-                      <Icon
-                        icon={items.icon}
-                        className="text-lg text-muted-foreground group-hover/link:text-primary"
-                      />
-                      <div className="w-3/4">
-                        <h5 className="mb-0 text-sm text-muted-foreground group-hover/link:text-primary">
-                          {items.title}
-                        </h5>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
-            ))}
-          </SimpleBar>
+          <div className="px-4 pb-2">
+            <p className="mb-0 text-sm font-semibold text-foreground truncate">
+              {utilisateur?.nom ?? 'Utilisateur'}
+            </p>
+            <p className="mb-0 text-xs text-muted-foreground truncate">
+              {utilisateur?.email}
+            </p>
+            {utilisateur && (
+              <span className="mt-2 inline-block rounded-full bg-lightprimary px-2 py-0.5 text-[11px] font-medium text-primary">
+                {LIBELLES_ROLE[utilisateur.role]}
+              </span>
+            )}
+          </div>
 
-          <DropdownMenuSeparator className='my-2' />
+          <DropdownMenuSeparator className="my-2" />
 
-          <div className="pt-2 px-4">
+          <div className="px-4">
             <Button
-              asChild
+              type="button"
               variant="outline"
               className="w-full rounded-md"
+              onClick={seDeconnecter}
             >
-              <Link to="/auth/auth2/login">Logout</Link>
+              Se déconnecter
             </Button>
           </div>
         </DropdownMenuContent>

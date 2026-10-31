@@ -1,6 +1,5 @@
 import { useState, useEffect, useEffectEvent } from 'react';
 import { Icon } from '@iconify/react';
-import Messages from './Messages';
 import FullLogo from '../../shared/logo/FullLogo';
 import Profile from './Profile';
 import SidebarLayout from '../sidebar/Sidebar';
@@ -9,6 +8,9 @@ import { useTheme } from 'src/components/provider/theme-provider';
 import { Sheet, SheetContent, SheetTitle } from 'src/components/ui/sheet';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Search from './Search';
+
+const SITE_URL: string =
+  import.meta.env.VITE_FRONT_URL ?? 'http://localhost:3010';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -83,6 +85,17 @@ const Header = () => {
 
           <div className="xl:!block !hidden md:!hidden">
             <div className="flex gap-0 items-center">
+              {/* Lien vers le site public */}
+              <a
+                href={SITE_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mr-3 inline-flex items-center gap-2 rounded-lg border border-primary/30 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+              >
+                <Icon icon="tabler:world" width={16} />
+                Voir le site
+              </a>
+
               {/* Theme Toggle */}
               {theme === 'light' ? (
                 <div
@@ -109,9 +122,6 @@ const Header = () => {
                 </div>
               )}
 
-              {/* Messages Dropdown */}
-              <Messages />
-
               {/* Profile Dropdown */}
               <Profile />
             </div>
@@ -120,6 +130,16 @@ const Header = () => {
           <span className="flex xl:hidden " onClick={handleMobileMenu}>
             <div className="xl:hidden flex w-full">
               <div className="flex justify-center items-center">
+                <a
+                  href={SITE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Voir le site"
+                  aria-label="Voir le site"
+                  className="mr-1 inline-flex items-center justify-center rounded-full p-2 text-primary hover:bg-lightprimary"
+                >
+                  <Icon icon="tabler:world" width={20} />
+                </a>
                 {theme === 'light' ? (
                   <div
                     className="hover:text-primary px-1 sm:px-15 group  dark:hover:text-primary focus:ring-0 rounded-full flex justify-center items-center cursor-pointer text-foreground dark:text-muted-foreground relative"
@@ -144,7 +164,6 @@ const Header = () => {
                     </span>
                   </div>
                 )}
-                <Messages />
                 <Profile />
               </div>
             </div>

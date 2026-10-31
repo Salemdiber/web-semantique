@@ -1,0 +1,1033 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://example.org/education-formation#"
+     xml:base="http://example.org/education-formation"
+     xmlns:edu="http://example.org/education-formation#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://example.org/education-formation#">
+        <rdfs:comment xml:lang="fr">Modélisation des compétences, programmes pédagogiques, prérequis et parcours d&apos;apprentissage.</rdfs:comment>
+        <rdfs:label xml:lang="fr">Ontologie Éducation et Formation</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.org/education-formation#aPourPrerequis -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#aPourPrerequis">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:label xml:lang="fr">Cours a un Prérequis</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#contientCours -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#contientCours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Formation contient un Cours</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#contientCoursParcours -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#contientCoursParcours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#ParcoursApprentissage"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Parcours d&apos;apprentissage contient un Cours</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#contientFormation -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#contientFormation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:label xml:lang="fr">Programme Pédagogique contient une Formation</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#developpeCompetence -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#developpeCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Cours développe une Compétence</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#enseigne -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#enseigne">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formateur"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Formateur enseigne un Cours</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#evalue -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#evalue">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <rdfs:label xml:lang="fr">Évaluation évalue un Étudiant</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#evalueCompetence -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#evalueCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Évaluation évalue une Compétence</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#faitPartieDe -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#faitPartieDe">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:label xml:lang="fr">Formation fait partie d&apos;un Programme Pédagogique</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#meneVers -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#meneVers">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Formation mène vers une Certification</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#necessiteCompetence -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#necessiteCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Prérequis nécessite une Compétence</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#obtientCertification -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#obtientCertification">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Étudiant obtient une Certification</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#porteSur -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#porteSur">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Évaluation porte sur un Cours</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#suitCours -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#suitCours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Étudiant suit un Cours</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#suitFormation -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#suitFormation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:label xml:lang="fr">Étudiant suit une Formation</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.org/education-formation#anneeProgramme -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#anneeProgramme">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Année du programme</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#dateObtention -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#dateObtention">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Date d&apos;obtention</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#descriptionCours -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#descriptionCours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Description du cours</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#descriptionFormation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#descriptionFormation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Description de la formation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#descriptionPrerequis -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#descriptionPrerequis">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Description du prérequis</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#dureeCours -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#dureeCours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Durée du cours</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#dureeFormation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#dureeFormation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Durée de la formation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#email -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#email">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Email</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#niveau -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#niveau">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Niveau</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#niveauCompetence -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#niveauCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Niveau de compétence</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#niveauRequis -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#niveauRequis">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Niveau requis</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nom -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nom">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nomCertification -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomCertification">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom de la certification</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nomCompetence -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom de la compétence</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nomCours -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomCours">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom du cours</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nomFormation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomFormation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom de la formation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#nomProgramme -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomProgramme">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom du programme</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#organisme -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#organisme">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Organisme</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#prenom -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#prenom">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Prénom</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.org/education-formation#Certification -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Certification">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Certification</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CertificationProfessionnelle -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CertificationProfessionnelle">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Certification Professionnelle</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CertificationTechnique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CertificationTechnique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Certification Technique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Competence -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Competence">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Compétence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CompetenceLinguistique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CompetenceLinguistique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Compétence Linguistique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CompetenceTechnique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CompetenceTechnique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Compétence Technique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Cours -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Cours">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Cours</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CoursPratique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CoursPratique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Cours Pratique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CoursTheorique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CoursTheorique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Cours"/>
+        <rdfs:label xml:lang="fr">Cours Théorique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#EducationFormation -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#EducationFormation">
+        <rdfs:label xml:lang="fr">Éducation et Formation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Etudiant -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Etudiant">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:label xml:lang="fr">Étudiant</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Evaluation -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Evaluation">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Évaluation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Examen -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Examen">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:label xml:lang="fr">Examen</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Formateur -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Formateur">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Personne"/>
+        <rdfs:label xml:lang="fr">Formateur</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Formation -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Formation">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Formation</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#FormationProfessionnelle -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#FormationProfessionnelle">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:label xml:lang="fr">Formation Professionnelle</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#FormationUniversitaire -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#FormationUniversitaire">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Formation"/>
+        <rdfs:label xml:lang="fr">Formation Universitaire</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ParcoursApprentissage -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ParcoursApprentissage">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Parcours d&apos;Apprentissage</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ParcoursAvance -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ParcoursAvance">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#ParcoursApprentissage"/>
+        <rdfs:label xml:lang="fr">Parcours Avancé</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ParcoursDebutant -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ParcoursDebutant">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#ParcoursApprentissage"/>
+        <rdfs:label xml:lang="fr">Parcours Débutant</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Personne -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Personne">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Personne</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Prerequis -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Prerequis">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Prérequis</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#PrerequisCompetence -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#PrerequisCompetence">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:label xml:lang="fr">Prérequis de Compétence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#PrerequisNiveau -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#PrerequisNiveau">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <rdfs:label xml:lang="fr">Prérequis de Niveau</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ProgrammePedagogique -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ProgrammePedagogique">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#EducationFormation"/>
+        <rdfs:label xml:lang="fr">Programme Pédagogique</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ProgrammeProfessionnel -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ProgrammeProfessionnel">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:label xml:lang="fr">Programme Professionnel</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#ProgrammeUniversitaire -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#ProgrammeUniversitaire">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <rdfs:label xml:lang="fr">Programme Universitaire</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Projet -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Projet">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:label xml:lang="fr">Projet</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#Quiz -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#Quiz">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:label xml:lang="fr">Quiz</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#SoftSkill -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#SoftSkill">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Soft Skill</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#CertificationCompetence -->
+
+    <owl:Class rdf:about="http://example.org/education-formation#CertificationCompetence">
+        <rdfs:subClassOf rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:label xml:lang="fr">Certification de compétence</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://example.org/education-formation#nomEvaluation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#nomEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Nom de l&apos;évaluation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#dateEvaluation -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#dateEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:label xml:lang="fr">Date de l&apos;évaluation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMaximale -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMaximale">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note maximale</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMinimaleReussite -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMinimaleReussite">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note minimale de réussite</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteObtenue -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteObtenue">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Note obtenue</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#noteMinimaleCertification -->
+
+    <owl:DatatypeProperty rdf:about="http://example.org/education-formation#noteMinimaleCertification">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+        <rdfs:label xml:lang="fr">Condition d&apos;obtention (note minimale)</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://example.org/education-formation#certifieCompetence -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#certifieCompetence">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Competence"/>
+        <rdfs:label xml:lang="fr">Compétence certifiée</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://example.org/education-formation#certifieEvaluation -->
+
+    <owl:ObjectProperty rdf:about="http://example.org/education-formation#certifieEvaluation">
+        <rdfs:domain rdf:resource="http://example.org/education-formation#Certification"/>
+        <rdfs:range rdf:resource="http://example.org/education-formation#Evaluation"/>
+        <rdfs:label xml:lang="fr">Évaluation associée à la certification</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://example.org/education-formation#Ahmed -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Ahmed">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <suitFormation rdf:resource="http://example.org/education-formation#Formation_DataScience"/>
+        <niveau>3ème année</niveau>
+        <prenom>Ahmed</prenom>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Amel -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Amel">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formateur"/>
+        <enseigne rdf:resource="http://example.org/education-formation#Python"/>
+        <descriptionFormation>Data Science</descriptionFormation>
+        <prenom>Amel</prenom>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Angular -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Angular">
+        <rdf:type rdf:resource="http://example.org/education-formation#Cours"/>
+        <aPourPrerequis rdf:resource="http://example.org/education-formation#BasesJavaScript"/>
+        <developpeCompetence rdf:resource="http://example.org/education-formation#DeveloppementWeb"/>
+        <dureeCours>30 heures</dureeCours>
+        <nomCours>Angular</nomCours>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#BasesJavaScript -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#BasesJavaScript">
+        <rdf:type rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <necessiteCompetence rdf:resource="http://example.org/education-formation#Programmation"/>
+        <descriptionPrerequis>Connaissances de base en JavaScript</descriptionPrerequis>
+        <niveauRequis>Débutant</niveauRequis>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#BasesPython -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#BasesPython">
+        <rdf:type rdf:resource="http://example.org/education-formation#Prerequis"/>
+        <descriptionPrerequis>Connaissances de base en Python</descriptionPrerequis>
+        <niveauRequis>Débutant</niveauRequis>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Certification_Data -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Certification_Data">
+        <rdf:type rdf:resource="http://example.org/education-formation#Certification"/>
+        <nomCertification>Certification Data</nomCertification>
+        <organisme>Centre de Formation</organisme>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Certification_Web -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Certification_Web">
+        <rdf:type rdf:resource="http://example.org/education-formation#Certification"/>
+        <nomCertification>Certification Web</nomCertification>
+        <organisme>Centre de Formation</organisme>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#DeveloppementWeb -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#DeveloppementWeb">
+        <rdf:type rdf:resource="http://example.org/education-formation#Competence"/>
+        <niveauCompetence>Avancé</niveauCompetence>
+        <nomCompetence>Développement Web</nomCompetence>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Examen_Python -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Examen_Python">
+        <rdf:type rdf:resource="http://example.org/education-formation#Examen"/>
+        <evalue rdf:resource="http://example.org/education-formation#Sara"/>
+        <porteSur rdf:resource="http://example.org/education-formation#Python"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Formation_DataScience -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Formation_DataScience">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formation"/>
+        <contientCours rdf:resource="http://example.org/education-formation#Python"/>
+        <faitPartieDe rdf:resource="http://example.org/education-formation#Programme_Data"/>
+        <meneVers rdf:resource="http://example.org/education-formation#Certification_Data"/>
+        <dureeFormation>3 ans</dureeFormation>
+        <nomFormation>Formation Data Science</nomFormation>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Formation_TWIN -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Formation_TWIN">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formation"/>
+        <contientCours rdf:resource="http://example.org/education-formation#Angular"/>
+        <contientCours rdf:resource="http://example.org/education-formation#JavaScript"/>
+        <faitPartieDe rdf:resource="http://example.org/education-formation#Programme_TWIN"/>
+        <meneVers rdf:resource="http://example.org/education-formation#Certification_Web"/>
+        <dureeFormation>5 ans</dureeFormation>
+        <nomFormation>Formation TWIN</nomFormation>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#JavaScript -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#JavaScript">
+        <rdf:type rdf:resource="http://example.org/education-formation#Cours"/>
+        <dureeCours>25 heures</dureeCours>
+        <nomCours>JavaScript</nomCours>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Mohamed -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Mohamed">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formateur"/>
+        <enseigne rdf:resource="http://example.org/education-formation#Angular"/>
+        <descriptionFormation>Développement Web</descriptionFormation>
+        <prenom>Mohamed</prenom>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Parcours_Data -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Parcours_Data">
+        <rdf:type rdf:resource="http://example.org/education-formation#ParcoursApprentissage"/>
+        <contientCoursParcours rdf:resource="http://example.org/education-formation#Python"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Parcours_Web -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Parcours_Web">
+        <rdf:type rdf:resource="http://example.org/education-formation#ParcoursApprentissage"/>
+        <contientCoursParcours rdf:resource="http://example.org/education-formation#Angular"/>
+        <contientCoursParcours rdf:resource="http://example.org/education-formation#JavaScript"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Programmation -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Programmation">
+        <rdf:type rdf:resource="http://example.org/education-formation#Competence"/>
+        <niveauCompetence>Intermédiaire</niveauCompetence>
+        <nomCompetence>Programmation</nomCompetence>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Programme_Data -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Programme_Data">
+        <rdf:type rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <contientFormation rdf:resource="http://example.org/education-formation#Formation_DataScience"/>
+        <anneeProgramme>2026</anneeProgramme>
+        <nomProgramme>Programme Data</nomProgramme>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Programme_TWIN -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Programme_TWIN">
+        <rdf:type rdf:resource="http://example.org/education-formation#ProgrammePedagogique"/>
+        <contientFormation rdf:resource="http://example.org/education-formation#Formation_TWIN"/>
+        <anneeProgramme>2026</anneeProgramme>
+        <nomProgramme>Programme TWIN</nomProgramme>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Python -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Python">
+        <rdf:type rdf:resource="http://example.org/education-formation#Cours"/>
+        <aPourPrerequis rdf:resource="http://example.org/education-formation#BasesPython"/>
+        <developpeCompetence rdf:resource="http://example.org/education-formation#Programmation"/>
+        <dureeCours>30 heures</dureeCours>
+        <nomCours>Python</nomCours>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Quiz_Angular -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Quiz_Angular">
+        <rdf:type rdf:resource="http://example.org/education-formation#Quiz"/>
+        <evalue rdf:resource="http://example.org/education-formation#Salem"/>
+        <evalueCompetence rdf:resource="http://example.org/education-formation#DeveloppementWeb"/>
+        <porteSur rdf:resource="http://example.org/education-formation#Angular"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Salem -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Salem">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <obtientCertification rdf:resource="http://example.org/education-formation#Certification_Web"/>
+        <suitCours rdf:resource="http://example.org/education-formation#Angular"/>
+        <suitFormation rdf:resource="http://example.org/education-formation#Formation_TWIN"/>
+        <niveau>5ème cycle</niveau>
+        <prenom>Salem</prenom>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://example.org/education-formation#Sara -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Sara">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <suitCours rdf:resource="http://example.org/education-formation#Python"/>
+        <niveau>2ème année</niveau>
+        <prenom>Sara</prenom>
+    </owl:NamedIndividual>
+
+    <!-- http://example.org/education-formation#compte_16 -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#compte_16">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <email>preserve.639290133388334797@example.com</email>
+        <nom>Preserve Note</nom>
+        <prenom>Preserve Note</prenom>
+        <rdfs:label xml:lang="fr">Preserve Note</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- http://example.org/education-formation#compte_4 -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#compte_4">
+        <rdf:type rdf:resource="http://example.org/education-formation#Etudiant"/>
+        <email>slimdiber@gmail.com</email>
+        <nom>salem diber</nom>
+        <prenom>salem diber</prenom>
+        <rdfs:label xml:lang="fr">salem diber</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- http://example.org/education-formation#compte_10 -->
+
+    <owl:NamedIndividual rdf:about="http://example.org/education-formation#compte_10">
+        <rdf:type rdf:resource="http://example.org/education-formation#Formateur"/>
+        <email>formateur@gmail.com</email>
+        <nom>salem formateur</nom>
+        <prenom>salem formateur</prenom>
+        <rdfs:label xml:lang="fr">salem formateur</rdfs:label>
+    </owl:NamedIndividual>
+
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

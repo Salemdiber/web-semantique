@@ -191,14 +191,26 @@ GROUP BY ?parcours ?typeLabel
 
 # -------------------------------------------------------- Évaluations ---
 EVALUATIONS = PREFIXE + """
-SELECT ?evaluation ?typeLabel ?coursNom ?etudiantNom ?competenceNom
+SELECT DISTINCT ?evaluation ?typeLabel ?cours ?coursNom ?etudiant
+       ?etudiantNom ?competence ?competenceNom
+       ?nomEvaluation ?dateEvaluation ?noteMaximale
+       ?noteMinimaleReussite ?noteObtenue
+       (GROUP_CONCAT(DISTINCT ?typedirect; separator="|") AS ?types)
 WHERE {
     ?evaluation rdf:type/rdfs:subClassOf* edu:Evaluation .
     OPTIONAL {
         ?evaluation rdf:type ?typedirect .
         ?typedirect rdfs:subClassOf edu:Evaluation .
-        ?typedirect rdfs:label ?typeLabel .
+        FILTER (?typedirect != edu:Evaluation)
+        OPTIONAL { ?typedirect rdfs:label ?typeLabel }
     }
+    OPTIONAL { ?evaluation edu:nomEvaluation ?nomEvaluation }
+    OPTIONAL { ?evaluation edu:dateEvaluation ?dateEvaluation }
+    OPTIONAL { ?evaluation edu:noteMaximale ?noteMaximale }
+    OPTIONAL {
+        ?evaluation edu:noteMinimaleReussite ?noteMinimaleReussite
+    }
+    OPTIONAL { ?evaluation edu:noteObtenue ?noteObtenue }
     OPTIONAL {
         ?evaluation edu:porteSur ?cours.
         ?cours edu:nomCours ?coursNom .
@@ -212,30 +224,95 @@ WHERE {
         ?competence edu:nomCompetence ?competenceNom .
     }
 }
-ORDER BY ?typeLabel
+GROUP BY ?evaluation ?typeLabel ?cours ?coursNom ?etudiant ?etudiantNom
+         ?competence ?competenceNom ?nomEvaluation ?dateEvaluation
+         ?noteMaximale ?noteMinimaleReussite ?noteObtenue
+ORDER BY ?evaluation
 """
+
+def evaluations_etudiant(individu: str) -> str:
+    """Évaluations et quiz attribués à un étudiant donné (nom local OWL)."""
+    return PREFIXE + f"""
+SELECT DISTINCT ?evaluation ?typeLabel ?cours ?coursNom ?etudiant
+       ?etudiantNom ?competence ?competenceNom
+       ?nomEvaluation ?dateEvaluation ?noteMaximale
+       ?noteMinimaleReussite ?noteObtenue
+WHERE {{
+    ?evaluation rdf:type/rdfs:subClassOf* edu:Evaluation .
+    ?evaluation edu:evalue edu:{individu} .
+    BIND (edu:{individu} AS ?etudiant)
+    OPTIONAL {{
+        ?evaluation rdf:type ?typedirect .
+        ?typedirect rdfs:subClassOf edu:Evaluation .
+        FILTER (?typedirect != edu:Evaluation)
+        OPTIONAL {{ ?typedirect rdfs:label ?typeLabel }}
+    }}
+    OPTIONAL {{ ?evaluation edu:nomEvaluation ?nomEvaluation }}
+    OPTIONAL {{ ?evaluation edu:dateEvaluation ?dateEvaluation }}
+    OPTIONAL {{ ?evaluation edu:noteMaximale ?noteMaximale }}
+    OPTIONAL {{
+        ?evaluation edu:noteMinimaleReussite ?noteMinimaleReussite
+    }}
+    OPTIONAL {{ ?evaluation edu:noteObtenue ?noteObtenue }}
+    OPTIONAL {{
+        ?evaluation edu:porteSur ?cours.
+        ?cours edu:nomCours ?coursNom .
+    }}
+    OPTIONAL {{
+        edu:{individu} edu:prenom ?etudiantNom .
+    }}
+    OPTIONAL {{
+        ?evaluation edu:evalueCompetence ?competence.
+        ?competence edu:nomCompetence ?competenceNom .
+    }}
+}}
+ORDER BY ?evaluation
+"""
+
 
 # ------------------------------------------------------ Certifications ---
 CERTIFICATIONS = PREFIXE + """
-SELECT ?certification ?nom ?organisme ?typeLabel ?formationNom ?etudiantNom
+SELECT ?certification ?nom ?organisme ?typeLabel ?formation ?formationNom
+       ?competence ?competenceNom ?evaluation ?evaluationNom
+       ?noteMinimaleCertification ?dateObtention
+       (GROUP_CONCAT(DISTINCT ?typedirect; separator="|") AS ?types)
+       (GROUP_CONCAT(DISTINCT ?etudiantNom; separator="|") AS ?etudiantNoms)
+       (GROUP_CONCAT(DISTINCT ?etudiant; separator="|") AS ?etudiants)
 WHERE {
     ?certification rdf:type/rdfs:subClassOf* edu:Certification .
     ?certification edu:nomCertification ?nom .
     OPTIONAL { ?certification edu:organisme ?organisme }
+    OPTIONAL { ?certification edu:dateObtention ?dateObtention }
+    OPTIONAL {
+        ?certification edu:noteMinimaleCertification
+            ?noteMinimaleCertification
+    }
+    OPTIONAL {
+        ?certification edu:certifieCompetence ?competence .
+        OPTIONAL { ?competence edu:nomCompetence ?competenceNom }
+    }
+    OPTIONAL {
+        ?certification edu:certifieEvaluation ?evaluation .
+        OPTIONAL { ?evaluation edu:nomEvaluation ?evaluationNom }
+    }
     OPTIONAL {
         ?certification rdf:type ?typedirect .
         ?typedirect rdfs:subClassOf edu:Certification .
-        ?typedirect rdfs:label ?typeLabel .
+        FILTER (?typedirect != edu:Certification)
+        OPTIONAL { ?typedirect rdfs:label ?typeLabel }
     }
     OPTIONAL {
-        ?formation edu:meneVers ?certification.
-        ?formation edu:nomFormation ?formationNom .
+        ?formation edu:meneVers ?certification .
+        OPTIONAL { ?formation edu:nomFormation ?formationNom }
     }
     OPTIONAL {
-        ?etudiant edu:obtientCertification ?certification.
-        ?etudiant edu:prenom ?etudiantNom .
+        ?etudiant edu:obtientCertification ?certification .
+        OPTIONAL { ?etudiant edu:prenom ?etudiantNom }
     }
 }
+GROUP BY ?certification ?nom ?organisme ?typeLabel ?formation ?formationNom
+         ?competence ?competenceNom ?evaluation ?evaluationNom
+         ?noteMinimaleCertification ?dateObtention
 ORDER BY ?nom
 """
 
