@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 
 const SITE_URL: string =
-  import.meta.env.VITE_FRONT_URL ?? 'http://localhost:3010';
+  import.meta.env.VITE_FRONT_URL ?? 'http://localhost:3001';
 
 interface Props {
   titre: string;

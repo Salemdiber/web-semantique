@@ -61,7 +61,17 @@ export type Competence = {
   niveau: string | null;
   type: string | null;
   coursDeveloppant: string[];
+  coursIds: string[];
   necessitee: string[];
+};
+
+export type Prerequis = {
+  id: string;
+  description: string;
+  niveau: string;
+  competenceId: string;
+  competenceNom: string | null;
+  coursIds: string[];
 };
 
 export type Programme = {

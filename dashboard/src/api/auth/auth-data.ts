@@ -27,7 +27,7 @@ const CLE_JETON = 'si-education-jeton';
 
 /**
  * Copie du jeton dans un cookie SameSite=Lax : les cookies ignorent le port,
- * ce qui permet à la landing (localhost:3010) de savoir que l'utilisateur est
+ * ce qui permet à la landing (localhost:3001) de savoir que l'utilisateur est
  * connecté sur le dashboard (localhost:5173) sans dupliquer la connexion.
  */
 const CLE_COOKIE = 'si-education-session';

@@ -11,6 +11,7 @@ import type {
   CoursGestion,
   CoursEntree,
   Competence,
+  Prerequis,
   Evaluation,
   Formateur,
   CertificationType,
@@ -123,6 +124,20 @@ export type CertificationEntree = {
   etudiants?: string[];
 };
 
+export type CompetenceEntree = {
+  nom: string;
+  niveau?: string | null;
+  type: string;
+  cours_ids: string[];
+};
+
+export type PrerequisEntree = {
+  description: string;
+  niveau: string;
+  competence_id: string;
+  cours_ids: string[];
+};
+
 export type ParcoursEntree = {
   nom: string;
   description?: string | null;
@@ -191,6 +206,14 @@ export const educationAPI = {
   /** GET /api/education/competences */
   competences: async (): Promise<Competence[]> =>
     demander('/education/competences'),
+
+  prerequis: async (): Promise<Prerequis[]> => demander('/education/prerequis'),
+  creerCompetence: async (donnees: CompetenceEntree): Promise<Competence> => envoyer('/education/competences', 'POST', donnees),
+  modifierCompetence: async (id: string, donnees: CompetenceEntree): Promise<Competence> => envoyer(`/education/competences/${encodeURIComponent(id)}`, 'PUT', donnees),
+  supprimerCompetence: async (id: string): Promise<{ statut: string; id: string }> => envoyer(`/education/competences/${encodeURIComponent(id)}`, 'DELETE'),
+  creerPrerequis: async (donnees: PrerequisEntree): Promise<Prerequis> => envoyer('/education/prerequis', 'POST', donnees),
+  modifierPrerequis: async (id: string, donnees: PrerequisEntree): Promise<Prerequis> => envoyer(`/education/prerequis/${encodeURIComponent(id)}`, 'PUT', donnees),
+  supprimerPrerequis: async (id: string): Promise<{ statut: string; id: string }> => envoyer(`/education/prerequis/${encodeURIComponent(id)}`, 'DELETE'),
 
   /** GET /api/education/programmes */
   programmes: async (): Promise<Programme[]> =>

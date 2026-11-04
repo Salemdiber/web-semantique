@@ -1,167 +1,104 @@
-INFO:     127.0.0.1:20997 - "POST /api/auth/connexion HTTP/1.1" 200 OK
-INFO:     127.0.0.1:20997 - "GET /api/education/quiz/Quiz_JavaScript_86f891/questions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:20997 - "GET /api/education/quiz/Quiz_JavaScript_86f891 HTTP/1.1" 401 Unauthorized
-INFO:     127.0.0.1:30842 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37949 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:14741 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56817 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17987 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37949 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60377 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:14741 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56817 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17987 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:30842 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17987 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:30842 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17987 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:27521 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:27523 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:27524 - "GET /api/education/sante HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48673 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40913 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48673 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40913 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41570 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:15767 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40913 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50116 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41570 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48673 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41570 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48673 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41570 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50138 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:6430 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:1813 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55884 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46143 - "GET /api/education/statistiques HTTP/1.1" 200 OK
-INFO:     127.0.0.1:6430 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:22825 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:1813 - "GET /api/education/formateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46143 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:1813 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46143 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46166 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:3315 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:3335 - "POST /api/auth/connexion HTTP/1.1" 200 OK
-INFO:     127.0.0.1:3335 - "GET /api/auth/utilisateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:3335 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:5159 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:13386 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:13387 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:13389 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:13390 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:13385 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64809 - "POST /api/auth/connexion HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64809 - "GET /api/auth/utilisateurs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64809 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:3293 - "GET /api/education/quiz/Quiz_JavaScript_86f891 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:26889 - "POST /api/education/quiz/Quiz_JavaScript_86f891/soumettre HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7433 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7458 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:32068 - "GET /api/education/quiz/Quiz_JavaScript_86f891 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:8711 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34163 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34167 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34168 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34169 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:34162 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:15719 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:35780 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:9860 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:4273 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:4274 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:35789 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:4279 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:4280 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61307 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33413 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33356 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:2782 - "DELETE /api/education/evaluations/Quiz_Angular_779155 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:10380 - "PUT /api/education/evaluations/Quiz_JavaScript_86f891 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17255 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17256 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39415 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:17258 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57168 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:33243 - "PUT /api/education/evaluations/Quiz_Angular_779155 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:19145 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32848 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32850 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:32851 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39642 - "GET /api/education/quiz/Quiz_Angular_779155/questions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:29620 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:37665 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:59216 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:29054 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:9443 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:28606 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:27006 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:64070 - "PUT /api/education/quiz/Quiz_Angular_779155/questions HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33128 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33130 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33125 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33131 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:28678 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:23571 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:23573 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:23574 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:23575 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:23570 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:24272 - "PUT /api/education/evaluations/Quiz_Angular_779155 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52519 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63213 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63216 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63217 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63478 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52794 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39933 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39934 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39936 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39937 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39932 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39983 - "GET /api/education/quiz/Quiz_Angular_779155 HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53055 - "POST /api/education/quiz/Quiz_Angular_779155/soumettre HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46184 - "GET /api/education/mes-evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:10451 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:53449 - "GET /api/auth/moi HTTP/1.1" 200 OK
-INFO:     127.0.0.1:48098 - "GET /api/education/cours HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7709 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7710 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:11195 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7714 - "GET /api/education/certifications HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7715 - "GET /api/education/formations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:27104 - "GET /api/education/etudiants HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64361 - "GET /api/education/competences HTTP/1.1" 200 OK
-INFO:     127.0.0.1:29911 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:7049 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:1069 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:18621 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:19538 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:51238 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:56904 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:16297 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:52384 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:45220 - "POST /api/auth/connexion HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45220 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40530 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:40561 - "POST /api/auth/connexion HTTP/1.1" 200 OK
-INFO:     127.0.0.1:40561 - "GET /api/education/evaluations HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64075 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:44411 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:11523 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:9127 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:11233 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:6690 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:30901 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:50976 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:41564 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:15077 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:22963 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:17170 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:44483 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:20416 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:40542 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:2898 - "GET /health HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:8673 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51586 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51586 - "POST /api/auth/connexion HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51586 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51586 - "POST /api/education/prerequis HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:64488 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58010 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58011 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58012 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59505 - "POST /api/education/competences HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54195 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54198 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54197 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54328 - "PUT /api/education/competences/CompetenceTechnique_python_basics_09323e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55555 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55557 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55556 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63556 - "PUT /api/education/competences/CompetenceTechnique_python_basics_09323e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58854 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58856 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58855 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61293 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61292 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61298 - "DELETE /api/courses/Python HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60317 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60316 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57466 - "DELETE /api/courses/Angular HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65336 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65335 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59307 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59309 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59308 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63362 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62322 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62324 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62323 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51976 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51977 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51978 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54582 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58052 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58054 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58053 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53254 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65076 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57325 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57327 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57326 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54821 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63740 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63741 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63742 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50901 - "PUT /api/education/prerequis/PrerequisCompetence_Base_de_js_cf1b02 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50555 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50556 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50557 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51734 - "DELETE /api/education/prerequis/PrerequisCompetence_Base_de_js_cf1b02 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62618 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62620 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62619 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56945 - "PUT /api/education/prerequis/BasesJavaScript HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53942 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53944 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53943 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49750 - "PUT /api/education/prerequis/BasesPython HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56358 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56359 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56360 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55926 - "PUT /api/education/prerequis/PrerequisCompetence_bases_de_angular_611ee4 HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:51569 - "PUT /api/education/prerequis/PrerequisCompetence_bases_de_angular_611ee4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56973 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56974 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56975 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56484 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56483 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54325 - "POST /api/courses HTTP/1.1" 201 Created
+INFO:     127.0.0.1:58416 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58415 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60388 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60390 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60389 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "PUT /api/education/competences/CompetenceTechnique_python_basics_09323e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52377 - "GET /api/education/competences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52379 - "GET /api/education/prerequis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52378 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64212 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "OPTIONS /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54995 - "GET /api/education/statistiques HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54995 - "GET /api/education/statistiques HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "OPTIONS /api/education/parcours HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63317 - "OPTIONS /api/education/parcours HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64212 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET /api/education/formateurs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63317 - "GET /api/courses HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49267 - "GET /api/auth/moi HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "GET /api/education/parcours HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "GET /api/education/parcours HTTP/1.1" 200 OK

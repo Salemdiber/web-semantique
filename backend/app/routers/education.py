@@ -400,8 +400,9 @@ def row_to_competence(row: dict[str, Any]) -> dict[str, Any]:
         "id": row.get("competence"),
         "nom": row.get("nom"),
         "niveau": row.get("niveau"),
-        "type": row.get("typeLabel"),
+        "type": row.get("typeAgr") or row.get("typeLabel"),
         "coursDeveloppant": split(row.get("cours")),
+        "coursIds": [ecriture.nom_local(x) for x in split(row.get("coursIds"))],
         "necessitee": split(row.get("prerequis")),
     }
 
