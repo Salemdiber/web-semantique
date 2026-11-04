@@ -86,6 +86,42 @@ uvicorn app.main:app --reload --port 8000
 | `POST /api/ontologie/televerser`  | upload d'un autre fichier OWL via l'UI             |
 | `GET /api/ontologie/prerequis-competences` | chaîne complète Prérequis → Cours → Compétence |
 
+### Module « Gestion des cours » (`backend/app/routers/courses.py`)
+
+CRUD complet des individus `edu:Cours` (`GET` public, écritures réservées aux administrateurs).
+
+Propriétés OWL utilisées dans `education_formation_protege.owl` :
+- **Propriétés de données** (`xsd:string`) : `edu:nomCours`, `edu:descriptionCours`, `edu:dureeCours`, `edu:niveauCours` (nouvelle), `edu:categorieCours` (nouvelle).
+- **Propriétés objet** : `edu:enseigne` (`Formateur → Cours`), `edu:aPourPrerequis`, `edu:developpeCompetence` (conservées lors des mises à jour).
+- **Données d'exemple** : `Angular`, `Développement Web` (`edu:Cours_Developpement_Web`) et `Python` sont garantis au démarrage si absents (thread non bloquant).
+  Le seed est idempotent : il compare les noms normalisés et considère `Angular` et `Angulaire` comme équivalents, afin de ne jamais créer de doublon. Un échec Fuseki ou d'écriture est journalisé sans bloquer l'API.
+
+| Endpoint | Rôle requis | Description |
+|----------|-------------|-------------|
+| `GET /api/courses` | Public | Liste des cours : `id`, `nom`, `duree`, `description`, `niveau`, `categorie`, `formateurs`, `prerequis`, `competences`. |
+| `GET /api/courses/{id}` | Public | Détail d'un cours par nom local (`404` si absent). |
+| `POST /api/courses` | `admin` | Création (`201`). Corps : `nom`, `duree`, `description?`, `niveau?`, `categorie?`, `formateur?` (id local ou prénom). |
+| `PUT /api/courses/{id}` | `admin` | Mise à jour des champs gérés et du formateur (`404` si absent). |
+| `DELETE /api/courses/{id}` | `admin` | Suppression du sujet et des références entrantes (`404` si absent). |
+
+```bash
+# Lecture publique
+curl http://localhost:8000/api/courses
+curl http://localhost:8000/api/courses/Angular
+
+# Écritures (jeton administrateur requis)
+curl -X POST http://localhost:8000/api/courses \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"nom":"Développement Web","duree":"40 heures","niveau":"Intermédiaire","categorie":"Développement Web","formateur":"Mohamed"}'
+
+curl -X PUT http://localhost:8000/api/courses/Angular \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"nom":"Angular","duree":"35 heures","description":"Applications TypeScript structurées."}'
+
+curl -X DELETE http://localhost:8000/api/courses/Angular \
+  -H "Authorization: Bearer $TOKEN"
+```
+
 ### Module « Gestion des parcours d'apprentissage » (`backend/app/routers/parcours.py`)
 
 Propriétés OWL déclarées sur `edu:ParcoursApprentissage` dans `education_formation_protege.owl` :
@@ -123,6 +159,7 @@ npm run dev
 Pages principales :
 - **Accueil** (`/`) : indicateurs OWL (dont `ParcoursApprentissage`) et accès rapides.
 - **Ontologie Éducation** (`/education`) : explorateur SPARQL et contrôle du raisonneur OWL.
+- **Gestion des cours** (`/cours`) : CRUD complet des `edu:Cours` (création/modification/suppression réservées aux Admins, lecture pour les autres rôles).
 - **Parcours d'apprentissage** (`/parcours`, `/parcours/:id`) : administration complète (Admin), analyse pédagogique (Formateur) ou portail d'apprentissage et feuille de route (Étudiant).
 - **Évaluations & Certifications** (`/evaluations`).
 

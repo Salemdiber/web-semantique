@@ -40,6 +40,11 @@ yarn-error.log*
 # journaux de start-all.ps1
 .logs/
 
+# python
+backend/.venv/
+__pycache__/
+*.py[cod]
+
 # vercel
 .vercel
 

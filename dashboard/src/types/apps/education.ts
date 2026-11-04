@@ -11,6 +11,24 @@ export type Cours = {
   formateurs: string[];
 };
 
+/** Réponse de GET/POST/PUT /api/courses (module Gestion des cours). */
+export type CoursGestion = Cours & {
+  niveau: string | null;
+  categorie: string | null;
+  formateur: string | null;
+  formateurIds: string[];
+};
+
+/** Corps attendu par POST/PUT /api/courses. */
+export type CoursEntree = {
+  nom: string;
+  duree: string;
+  description?: string | null;
+  niveau?: string | null;
+  categorie?: string | null;
+  formateur?: string | null;
+};
+
 export type Etudiant = {
   id: string;
   prenom: string;

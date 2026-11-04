@@ -3,6 +3,7 @@
 Lancement :
     uvicorn app.main:app --reload --port 8000
 """
+import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -11,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import config, db
 from app import parcours_stockage
 from app import quiz as stockage_quiz
-from app.routers import auth, education, gestion, ontologie, parcours
+from app.routers import auth, courses, education, gestion, ontologie, parcours
 from app.routers import quiz as routeur_quiz
 
 
@@ -21,6 +22,12 @@ async def cycle_de_vie(_: FastAPI):
     db.initialiser()
     stockage_quiz.initialiser()
     parcours_stockage.initialiser()
+    # Non bloquant : Fuseki peut être indisponible au démarrage.
+    threading.Thread(
+        target=courses.initialiser_donnees_exemple,
+        name="seed-cours",
+        daemon=True,
+    ).start()
     yield
 
 
@@ -47,6 +54,7 @@ app.add_middleware(
 
 # `parcours.router` est monté avant `education.router` pour la priorité de `/education/parcours/*`
 app.include_router(parcours.router, prefix=config.API_PREFIX)
+app.include_router(courses.router, prefix=config.API_PREFIX)
 app.include_router(education.router, prefix=config.API_PREFIX)
 app.include_router(gestion.router, prefix=config.API_PREFIX)
 app.include_router(routeur_quiz.router, prefix=config.API_PREFIX)

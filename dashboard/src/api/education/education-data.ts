@@ -8,6 +8,8 @@ import type {
   Etudiant,
   Formation,
   Cours,
+  CoursGestion,
+  CoursEntree,
   Competence,
   Evaluation,
   Formateur,
@@ -150,6 +152,30 @@ export const educationAPI = {
   /** GET /api/education/cours/:nom */
   coursDetail: async (id: string): Promise<Cours> =>
     demander(`/education/cours/${encodeURIComponent(id)}`),
+
+  /* ------------------------------------- module Gestion des cours --- */
+
+  /** GET /api/courses — catalogue complet du module CRUD */
+  coursGestion: async (): Promise<CoursGestion[]> => demander('/courses'),
+
+  /** GET /api/courses/:id — détail d'un cours */
+  coursGestionDetail: async (id: string): Promise<CoursGestion> =>
+    demander(`/courses/${encodeURIComponent(id)}`),
+
+  /** POST /api/courses — création (admin) */
+  creerCours: async (donnees: CoursEntree): Promise<CoursGestion> =>
+    envoyer('/courses', 'POST', donnees),
+
+  /** PUT /api/courses/:id — mise à jour (admin) */
+  modifierCours: async (
+    id: string,
+    donnees: CoursEntree,
+  ): Promise<CoursGestion> =>
+    envoyer(`/courses/${encodeURIComponent(id)}`, 'PUT', donnees),
+
+  /** DELETE /api/courses/:id — suppression (admin) */
+  supprimerCours: async (id: string): Promise<{ statut: string; id: string }> =>
+    envoyer(`/courses/${encodeURIComponent(id)}`, 'DELETE'),
 
   /** GET /api/education/etudiants */
   etudiants: async (): Promise<Etudiant[]> => demander('/education/etudiants'),
