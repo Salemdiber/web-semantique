@@ -1107,21 +1107,8 @@
     <owl:NamedIndividual rdf:about="http://example.org/education-formation#Parcours_Data">
         <rdf:type rdf:resource="http://example.org/education-formation#ParcoursDebutant"/>
         <nomParcours>Parcours Data</nomParcours>
-        <descriptionParcours>Initiation structur?e ? la programmation scientifique et ? l&apos;analyse de donn?es avec Python.</descriptionParcours>
-        <objectifParcours>Ma?triser les fondamentaux de Python et acqu?rir les bases algorithmiques n?cessaires ? la Data Science.</objectifParcours>
         <statutParcours>publie</statutParcours>
         <rdfs:label xml:lang="fr">Parcours Data</rdfs:label>
-    </owl:NamedIndividual>
-
-    <!-- http://example.org/education-formation#Parcours_FullStack -->
-
-    <owl:NamedIndividual rdf:about="http://example.org/education-formation#Parcours_FullStack">
-        <rdf:type rdf:resource="http://example.org/education-formation#ParcoursAvance"/>
-        <nomParcours>Parcours Ing?nierie Full-Stack &amp; Data</nomParcours>
-        <descriptionParcours>Parcours avanc? combinant l&apos;algorithmique Python, JavaScript moderne et l&apos;architecture front-end Angular pour former un profil polyvalent.</descriptionParcours>
-        <objectifParcours>Valider de bout en bout les comp?tences Programmation et D?veloppement Web sans lacune de pr?requis.</objectifParcours>
-        <statutParcours>publie</statutParcours>
-        <rdfs:label xml:lang="fr">Parcours Ing?nierie Full-Stack &amp; Data</rdfs:label>
     </owl:NamedIndividual>
 
     <!-- http://example.org/education-formation#Parcours_Web -->
@@ -1129,8 +1116,6 @@
     <owl:NamedIndividual rdf:about="http://example.org/education-formation#Parcours_Web">
         <rdf:type rdf:resource="http://example.org/education-formation#ParcoursDebutant"/>
         <nomParcours>Parcours Web</nomParcours>
-        <descriptionParcours>Apprentissage progressif du d?veloppement front-end moderne, des fondamentaux de JavaScript jusqu&apos;au framework Angular.</descriptionParcours>
-        <objectifParcours>Concevoir et structurer des applications web r?actives monopages (SPA) pr?tes pour la production.</objectifParcours>
         <statutParcours>publie</statutParcours>
         <rdfs:label xml:lang="fr">Parcours Web</rdfs:label>
     </owl:NamedIndividual>

@@ -1,4 +1,4 @@
-"""CRUD des évaluations et certifications de l'ontologie.
+"""CRUD des formations, évaluations et certifications de l'ontologie.
 
 Une évaluation porte un nom, une date, une note maximale, une note minimale de
 réussite et éventuellement le résultat obtenu par l'étudiant. Une certification
@@ -30,6 +30,7 @@ from app.routers.education import (
     exec_,
     row_to_certification,
     row_to_evaluation,
+    split,
 )
 
 router = APIRouter(prefix="/education", tags=["Évaluations & Certifications"])
@@ -115,6 +116,21 @@ class CertificationEntree(BaseModel):
         return valeur
 
 
+class FormationEntree(BaseModel):
+    nom: str = Field(min_length=2, max_length=120)
+    duree: str = Field(min_length=1, max_length=80)
+    description: str | None = Field(default=None, max_length=500)
+    cours: list[str] = Field(default_factory=list)
+    programme: str | None = Field(default=None, max_length=120)
+    certification: str | None = Field(default=None, max_length=120)
+
+
+class FormateurEntree(BaseModel):
+    prenom: str = Field(min_length=2, max_length=120)
+    domaine: str | None = Field(default=None, max_length=120)
+    cours: list[str] = Field(default_factory=list)
+
+
 # ----------------------------------------------------- accès en écriture ---
 def exiger_edition(
     utilisateur: Annotated[dict[str, Any], Depends(utilisateur_courant)],
@@ -126,6 +142,78 @@ def exiger_edition(
             detail="Réservé aux administrateurs et aux formateurs",
         )
     return utilisateur
+
+
+def exiger_etudiant(
+    utilisateur: Annotated[dict[str, Any], Depends(utilisateur_courant)],
+) -> dict[str, Any]:
+    if utilisateur.get("role") != "etudiant":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Réservé aux étudiants",
+        )
+    return utilisateur
+
+
+def exiger_admin(
+    utilisateur: Annotated[dict[str, Any], Depends(utilisateur_courant)],
+) -> dict[str, Any]:
+    if utilisateur.get("role") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Réservé aux administrateurs",
+        )
+    return utilisateur
+
+
+def _cours_du_formateur(utilisateur: dict[str, Any]) -> set[str]:
+    nom = ecriture.echapper(str(utilisateur.get("nom", "")))
+    compte = f"{EDU}compte_{int(utilisateur['id'])}"
+    rows = exec_(
+        PREFIX
+        + f"""
+        SELECT DISTINCT ?cours
+        WHERE {{
+            ?formateur edu:enseigne ?cours ;
+                       edu:prenom ?prenom .
+            FILTER (
+                ?formateur = <{compte}> ||
+                LCASE(STR(?prenom)) = LCASE("{nom}")
+            )
+        }}
+        """
+    )
+    return {ecriture.nom_local(row["cours"]) for row in rows if row.get("cours")}
+
+
+def _verifier_ownership(
+    ressource: str,
+    utilisateur: dict[str, Any],
+    predicat: str,
+) -> None:
+    if utilisateur.get("role") == "admin":
+        return
+    cours = _cours_du_formateur(utilisateur)
+    if not cours:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Aucun cours n'est associé à votre compte",
+        )
+    valeurs = " ".join(f"<{EDU}{cours_id}>" for cours_id in cours)
+    rows = exec_(
+        PREFIX
+        + f"""
+        SELECT ?ressource WHERE {{
+            <{EDU}{ressource}> <{EDU}{predicat}> ?cours .
+            VALUES ?cours {{ {valeurs} }}
+        }} LIMIT 1
+        """
+    )
+    if not rows:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vous ne pouvez gérer que vos propres ressources",
+        )
 
 
 # ------------------------------------------------------------------ utils ---
@@ -264,6 +352,129 @@ def _fiche_certification(nom: str) -> dict[str, Any]:
     rows = exec_(query)
     return (
         row_to_certification(rows[0]) if rows else row_to_certification({})
+    )
+
+
+def _fiche_formation(nom: str) -> dict[str, Any]:
+    query = PREFIX + f"""
+    SELECT ?formation ?nom ?duree ?description ?programmeNom
+           ?certificationNom
+           (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
+           (GROUP_CONCAT(DISTINCT COALESCE(?etudiantNom, ""); separator="|") AS ?etudiants)
+    WHERE {{
+        BIND (<{EDU}{nom}> AS ?formation)
+        ?formation edu:nomFormation ?nom .
+        OPTIONAL {{ ?formation edu:dureeFormation ?duree }}
+        OPTIONAL {{ ?formation edu:descriptionFormation ?description }}
+        OPTIONAL {{
+            ?formation edu:faitPartieDe ?programme .
+            ?programme edu:nomProgramme ?programmeNom
+        }}
+        OPTIONAL {{
+            ?formation edu:meneVers ?certification .
+            ?certification edu:nomCertification ?certificationNom
+        }}
+        OPTIONAL {{
+            ?formation edu:contientCours ?crs .
+            ?crs edu:nomCours ?coursNom
+        }}
+        OPTIONAL {{
+            ?etudiant edu:suitFormation ?formation .
+            ?etudiant edu:prenom ?etudiantNom
+        }}
+    }}
+    GROUP BY ?formation ?nom ?duree ?description ?programmeNom
+             ?certificationNom
+    """
+    rows = exec_(query)
+    if not rows:
+        raise HTTPException(status_code=404, detail="Formation introuvable")
+    ligne = rows[0]
+    return {
+        "id": ligne.get("formation"),
+        "nom": ligne.get("nom"),
+        "duree": ligne.get("duree") or "Durée non précisée",
+        "description": ligne.get("description"),
+        "programme": ligne.get("programmeNom"),
+        "certification": ligne.get("certificationNom"),
+        "cours": split(ligne.get("cours")),
+        "etudiants": split(ligne.get("etudiants")),
+    }
+
+
+def _fiche_formateur(nom: str) -> dict[str, Any]:
+    query = PREFIX + f"""
+    SELECT ?formateur ?prenom ?domaine
+           (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
+    WHERE {{
+        BIND (<{EDU}{nom}> AS ?formateur)
+        ?formateur edu:prenom ?prenom .
+        OPTIONAL {{ ?formateur edu:descriptionFormation ?domaine }}
+        OPTIONAL {{
+            ?formateur edu:enseigne ?crs .
+            ?crs edu:nomCours ?coursNom
+        }}
+    }}
+    GROUP BY ?formateur ?prenom ?domaine
+    """
+    rows = exec_(query)
+    if not rows:
+        raise HTTPException(status_code=404, detail="Formateur introuvable")
+    ligne = rows[0]
+    return {
+        "id": ligne.get("formateur"),
+        "prenom": ligne.get("prenom"),
+        "domaine": ligne.get("domaine") or "Domaine non précisé",
+        "cours": split(ligne.get("cours")),
+    }
+
+
+def _ecrire_formation(identifiant: str, donnees: FormationEntree) -> None:
+    cours = [_verifier(c, "Cours") for c in donnees.cours]
+    programme = _verifier(donnees.programme, "Programme")
+    certification = _verifier(donnees.certification, "Certification")
+    paires: list[tuple[str, str]] = [
+        (f"{EDU}nomFormation", _litteral(donnees.nom)),
+        (f"{EDU}dureeFormation", _litteral(donnees.duree)),
+    ]
+    if donnees.description:
+        paires.append(
+            (f"{EDU}descriptionFormation", _litteral(donnees.description))
+        )
+    if programme:
+        paires.append((f"{EDU}faitPartieDe", ecriture.iri(programme)))
+    if certification:
+        paires.append((f"{EDU}meneVers", ecriture.iri(certification)))
+    paires.extend(
+        (f"{EDU}contientCours", ecriture.iri(cours_id))
+        for cours_id in cours
+        if cours_id
+    )
+    bloc = _bloc(identifiant, donnees.nom, "Formation", paires)
+    _executer(
+        f"DELETE WHERE {{ <{EDU}{identifiant}> ?p ?o . }} ;\n"
+        f"INSERT DATA {{\n{bloc}\n}}"
+    )
+
+
+def _ecrire_formateur(identifiant: str, donnees: FormateurEntree) -> None:
+    cours = [_verifier(c, "Cours") for c in donnees.cours]
+    paires: list[tuple[str, str]] = [
+        (f"{EDU}prenom", _litteral(donnees.prenom)),
+    ]
+    if donnees.domaine:
+        paires.append(
+            (f"{EDU}descriptionFormation", _litteral(donnees.domaine))
+        )
+    paires.extend(
+        (f"{EDU}enseigne", ecriture.iri(cours_id))
+        for cours_id in cours
+        if cours_id
+    )
+    bloc = _bloc(identifiant, donnees.prenom, "Formateur", paires)
+    _executer(
+        f"DELETE WHERE {{ <{EDU}{identifiant}> ?p ?o . }} ;\n"
+        f"INSERT DATA {{\n{bloc}\n}}"
     )
 
 
@@ -410,14 +621,165 @@ def _ecrire_certification(
 
 # ------------------------------------------------------- routes CRUD -------
 @router.post(
+    "/formations",
+    status_code=status.HTTP_201_CREATED,
+    summary="Créer une formation (administrateur/formateur)",
+)
+def creer_formation(
+    donnees: FormationEntree,
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
+) -> dict[str, Any]:
+    if utilisateur.get("role") == "formateur":
+        cours = set(_cours_du_formateur(utilisateur))
+        if not cours.intersection(
+            {ecriture.nom_local(cours_id) for cours_id in donnees.cours}
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Une formation doit contenir au moins un de vos cours",
+            )
+    identifiant = ecriture.generer_id("Formation", donnees.nom)
+    _ecrire_formation(identifiant, donnees)
+    return _fiche_formation(identifiant)
+
+
+@router.put(
+    "/formations/{formation_id}",
+    summary="Modifier une formation (administrateur/formateur)",
+)
+def modifier_formation(
+    formation_id: str,
+    donnees: FormationEntree,
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
+) -> dict[str, Any]:
+    identifiant = ecriture.nom_local(formation_id)
+    if not _existe(identifiant):
+        raise HTTPException(status_code=404, detail="Formation introuvable")
+    _verifier_ownership(identifiant, utilisateur, "contientCours")
+    _ecrire_formation(identifiant, donnees)
+    return _fiche_formation(identifiant)
+
+
+@router.delete(
+    "/formations/{formation_id}",
+    summary="Supprimer une formation (administrateur/formateur)",
+)
+def supprimer_formation(
+    formation_id: str,
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
+) -> dict[str, str]:
+    identifiant = ecriture.nom_local(formation_id)
+    if not _existe(identifiant):
+        raise HTTPException(status_code=404, detail="Formation introuvable")
+    _verifier_ownership(identifiant, utilisateur, "contientCours")
+    sujet = f"<{EDU}{identifiant}>"
+    _executer(
+        f"DELETE WHERE {{ {sujet} ?p ?o . }} ;\n"
+        f"DELETE WHERE {{ ?s ?p {sujet} . }}"
+    )
+    return {"statut": "supprime"}
+
+
+@router.post(
+    "/formations/{formation_id}/inscription",
+    summary="Inscrire l'étudiant connecté à une formation",
+)
+def inscrire_formation(
+    formation_id: str,
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_etudiant)],
+) -> dict[str, str]:
+    identifiant = ecriture.nom_local(formation_id)
+    if not _existe(identifiant):
+        raise HTTPException(status_code=404, detail="Formation introuvable")
+
+    etudiant = f"compte_{utilisateur['id']}"
+    if not _existe(etudiant):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Le compte étudiant n'est pas encore synchronisé avec l'ontologie",
+        )
+
+    sujet_etudiant = f"<{EDU}{etudiant}>"
+    sujet_formation = f"<{EDU}{identifiant}>"
+    _executer(
+        f"""
+        INSERT DATA {{
+            {sujet_etudiant} <{EDU}suitFormation> {sujet_formation}
+        }}
+        """
+    )
+    return {
+        "statut": "inscrit",
+        "formation": identifiant,
+        "message": "Inscription à la formation enregistrée.",
+    }
+
+
+@router.post(
+    "/formateurs",
+    status_code=status.HTTP_201_CREATED,
+    summary="Créer un formateur (administrateur/formateur)",
+)
+def creer_formateur(
+    donnees: FormateurEntree,
+    _: Annotated[dict[str, Any], Depends(exiger_admin)],
+) -> dict[str, Any]:
+    identifiant = ecriture.generer_id("Formateur", donnees.prenom)
+    _ecrire_formateur(identifiant, donnees)
+    return _fiche_formateur(identifiant)
+
+
+@router.put(
+    "/formateurs/{formateur_id}",
+    summary="Modifier un formateur (administrateur/formateur)",
+)
+def modifier_formateur(
+    formateur_id: str,
+    donnees: FormateurEntree,
+    _: Annotated[dict[str, Any], Depends(exiger_admin)],
+) -> dict[str, Any]:
+    identifiant = ecriture.nom_local(formateur_id)
+    if not _existe(identifiant):
+        raise HTTPException(status_code=404, detail="Formateur introuvable")
+    _ecrire_formateur(identifiant, donnees)
+    return _fiche_formateur(identifiant)
+
+
+@router.delete(
+    "/formateurs/{formateur_id}",
+    summary="Supprimer un formateur (administrateur/formateur)",
+)
+def supprimer_formateur(
+    formateur_id: str,
+    _: Annotated[dict[str, Any], Depends(exiger_admin)],
+) -> dict[str, str]:
+    identifiant = ecriture.nom_local(formateur_id)
+    if not _existe(identifiant):
+        raise HTTPException(status_code=404, detail="Formateur introuvable")
+    sujet = f"<{EDU}{identifiant}>"
+    _executer(
+        f"DELETE WHERE {{ {sujet} ?p ?o . }} ;\n"
+        f"DELETE WHERE {{ ?s ?p {sujet} . }}"
+    )
+    return {"statut": "supprime"}
+
+
+@router.post(
     "/evaluations",
     status_code=status.HTTP_201_CREATED,
     summary="Créer une évaluation (administrateur/formateur)",
 )
 def creer_evaluation(
     donnees: EvaluationEntree,
-    _: Annotated[dict[str, Any], Depends(exiger_edition)],
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
 ) -> dict[str, Any]:
+    if utilisateur.get("role") == "formateur":
+        cours = _cours_du_formateur(utilisateur)
+        if ecriture.nom_local(donnees.cours) not in cours:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Vous ne pouvez évaluer que vos propres cours",
+            )
     identifiant = ecriture.generer_id(
         donnees.type, ecriture.nom_local(donnees.cours)
     )
@@ -432,11 +794,12 @@ def creer_evaluation(
 def modifier_evaluation(
     evaluation_id: str,
     donnees: EvaluationEntree,
-    _: Annotated[dict[str, Any], Depends(exiger_edition)],
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
 ) -> dict[str, Any]:
     identifiant = ecriture.nom_local(evaluation_id)
     if not _existe(identifiant):
         raise HTTPException(status_code=404, detail="Évaluation introuvable")
+    _verifier_ownership(identifiant, utilisateur, "porteSur")
     _ecrire_evaluation(identifiant, donnees)
     return _fiche_evaluation(identifiant)
 
@@ -447,11 +810,12 @@ def modifier_evaluation(
 )
 def supprimer_evaluation(
     evaluation_id: str,
-    _: Annotated[dict[str, Any], Depends(exiger_edition)],
+    utilisateur: Annotated[dict[str, Any], Depends(exiger_edition)],
 ) -> dict[str, str]:
     identifiant = ecriture.nom_local(evaluation_id)
     if not _existe(identifiant):
         raise HTTPException(status_code=404, detail="Évaluation introuvable")
+    _verifier_ownership(identifiant, utilisateur, "porteSur")
     _executer(f"DELETE WHERE {{ <{EDU}{identifiant}> ?p ?o . }}")
     quiz_stockage.supprimer_evaluation(identifiant)
     return {"statut": "supprime"}

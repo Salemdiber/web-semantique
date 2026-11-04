@@ -38,6 +38,7 @@ import type {
 import { useAuth } from 'src/context/auth-context';
 
 const AUCUN = '__aucun__';
+const TOUS = '__tous__';
 
 const TYPES: { valeur: string; libelle: string }[] = [
   { valeur: 'Examen', libelle: 'Examen' },
@@ -84,7 +85,13 @@ const GestionEvaluations = () => {
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState('');
   const [enCours, setEnCours] = useState(false);
-  const [filtre, setFiltre] = useState<'tous' | 'Quiz' | 'Examen'>('tous');
+  const [filtre, setFiltre] = useState<
+    'tous' | 'Quiz' | 'Examen' | 'Evaluation'
+  >('tous');
+  const [recherche, setRecherche] = useState('');
+  const [filtreResultat, setFiltreResultat] = useState<
+    'tous' | 'reussi' | 'echec' | 'attente'
+  >('tous');
   const [quizEtudiant, setQuizEtudiant] = useState<{
     id: string;
     nom: string;
@@ -277,11 +284,35 @@ const GestionEvaluations = () => {
     };
   }, [evaluations]);
 
-  /** Filtre « Tout / Quiz / Examens » appliqué à la liste affichée. */
+  /** Recherche et filtres appliqués à la liste affichée. */
   const evaluationsAffichees = useMemo(() => {
-    if (!estEtudiant || filtre === 'tous') return evaluations;
-    return evaluations.filter((evaluation) => evaluation.type === filtre);
-  }, [evaluations, estEtudiant, filtre]);
+    const terme = recherche.trim().toLocaleLowerCase();
+    return evaluations.filter((evaluation) => {
+      const correspondRecherche =
+        terme === '' ||
+        [
+          evaluation.nom,
+          evaluation.type,
+          evaluation.cours,
+          evaluation.etudiant,
+          evaluation.competence,
+          evaluation.date,
+        ]
+          .filter(Boolean)
+          .some((valeur) =>
+            valeur?.toLocaleLowerCase().includes(terme),
+          );
+      const typeEvaluation = versValeurType(evaluation.type);
+      const correspondType =
+        filtre === 'tous' || typeEvaluation === filtre;
+      const correspondResultat =
+        filtreResultat === 'tous' ||
+        (filtreResultat === 'reussi' && evaluation.reussi === true) ||
+        (filtreResultat === 'echec' && evaluation.reussi === false) ||
+        (filtreResultat === 'attente' && evaluation.reussi === null);
+      return correspondRecherche && correspondType && correspondResultat;
+    });
+  }, [evaluations, filtre, filtreResultat, recherche]);
 
   return (
     <CardBox className="p-6">
@@ -337,7 +368,7 @@ const GestionEvaluations = () => {
 
       {estEtudiant && (
         <div className="mb-4 flex flex-wrap gap-2">
-          {(['tous', 'Quiz', 'Examen'] as const).map((valeur) => (
+          {(['tous', 'Quiz', 'Examen', 'Evaluation'] as const).map((valeur) => (
             <Button
               key={valeur}
               size="sm"
@@ -348,11 +379,60 @@ const GestionEvaluations = () => {
                 ? `Tout (${bilan.total})`
                 : valeur === 'Quiz'
                   ? `Quiz (${bilan.quiz})`
-                  : `Examens (${compteurParType.Examen ?? 0})`}
+                  : valeur === 'Examen'
+                    ? `Examens (${compteurParType.Examen ?? 0})`
+                    : `Évaluations (${compteurParType['Évaluation'] ?? compteurParType.Evaluation ?? 0})`}
             </Button>
           ))}
         </div>
       )}
+
+      <div className="mb-4 grid gap-3 md:grid-cols-[minmax(0,2fr)_minmax(170px,1fr)_minmax(170px,1fr)]">
+        <Input
+          value={recherche}
+          onChange={(e) => setRecherche(e.target.value)}
+          placeholder="Rechercher par nom, cours, étudiant..."
+          aria-label="Rechercher une évaluation"
+        />
+        {!estEtudiant && (
+          <Select
+            value={filtre}
+            onValueChange={(valeur) =>
+              setFiltre(valeur as 'tous' | 'Quiz' | 'Examen' | 'Evaluation')
+            }
+          >
+            <SelectTrigger aria-label="Filtrer par type">
+              <SelectValue placeholder="Tous les types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="tous">Tous les types</SelectItem>
+              {TYPES.map((option) => (
+                <SelectItem key={option.valeur} value={option.valeur}>
+                  {option.libelle}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+        <Select
+          value={filtreResultat}
+          onValueChange={(valeur) =>
+            setFiltreResultat(
+              valeur as 'tous' | 'reussi' | 'echec' | 'attente',
+            )
+          }
+        >
+          <SelectTrigger aria-label="Filtrer par résultat">
+            <SelectValue placeholder="Tous les résultats" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="tous">Tous les résultats</SelectItem>
+            <SelectItem value="reussi">Réussi</SelectItem>
+            <SelectItem value="echec">Échec</SelectItem>
+            <SelectItem value="attente">En attente</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       {erreur && !ouvert && (
         <p
@@ -369,7 +449,9 @@ const GestionEvaluations = () => {
         </p>
       ) : evaluationsAffichees.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted-foreground">
-          {estEtudiant
+          {recherche || filtre !== 'tous' || filtreResultat !== 'tous'
+            ? 'Aucune évaluation ne correspond aux critères.'
+            : estEtudiant
             ? 'Aucune évaluation ni quiz ne vous est attribué pour le moment.'
             : 'Aucune évaluation enregistrée dans l\'ontologie.'}
         </p>

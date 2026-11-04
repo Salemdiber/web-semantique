@@ -49,6 +49,7 @@ export type Formation = {
   id: string;
   nom: string;
   duree: string;
+  description: string | null;
   programme: string | null;
   certification: string | null;
   cours: string[];
@@ -79,6 +80,15 @@ export type Programme = {
   nom: string;
   annee: string | null;
   formations: string[];
+};
+
+export type TraductionNLP = {
+  question: string;
+  intention: string;
+  typeRessource: string;
+  requete: string;
+  jetons: string[];
+  resultats?: Array<Record<string, string>>;
 };
 
 export type NiveauParcours = 'Debutant' | 'Avance';

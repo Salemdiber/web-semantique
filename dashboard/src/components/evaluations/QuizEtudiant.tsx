@@ -36,6 +36,7 @@ const QuizEtudiant = ({ evaluationId, nom, onClose, onTermine }: Props) => {
     if (!evaluationId) return;
     setChargement(true);
     setErreur('');
+    setDetail(null);
     setResultat(null);
     setReponses({});
     try {
@@ -59,6 +60,9 @@ const QuizEtudiant = ({ evaluationId, nom, onClose, onTermine }: Props) => {
     () => Object.keys(reponses).length,
     [reponses],
   );
+  const progression = detail && detail.questions.length > 0
+    ? Math.round((nombreRepondues / detail.questions.length) * 100)
+    : 0;
   const pretAEnvoyer =
     !!detail &&
     detail.questions.length > 0 &&
@@ -212,6 +216,30 @@ const QuizEtudiant = ({ evaluationId, nom, onClose, onTermine }: Props) => {
           </div>
         ) : (
           <div className="space-y-4">
+            <div className="rounded-lg border border-border bg-muted/30 p-3">
+              <div className="mb-2 flex items-center justify-between gap-3 text-xs">
+                <span className="font-medium text-foreground">
+                  Votre progression
+                </span>
+                <span className="text-muted-foreground">
+                  {nombreRepondues}/{detail.questions.length} répondue(s)
+                </span>
+              </div>
+              <div
+                className="h-2 overflow-hidden rounded-full bg-border"
+                role="progressbar"
+                aria-label="Progression du quiz"
+                aria-valuemin={0}
+                aria-valuemax={detail.questions.length}
+                aria-valuenow={nombreRepondues}
+              >
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{ width: `${progression}%` }}
+                />
+              </div>
+            </div>
+
             {detail.tentative && !detail.dejaReussi && (
               <p className="rounded-md bg-lightwarning px-3 py-2 text-sm text-warning">
                 Tentative précédente : {detail.tentative.note.toFixed(2)}/
@@ -240,6 +268,7 @@ const QuizEtudiant = ({ evaluationId, nom, onClose, onTermine }: Props) => {
                       <button
                         key={`${question.id}-${choixIndex}`}
                         type="button"
+                        aria-pressed={selectionne}
                         onClick={() =>
                           setReponses((actuelles) => ({
                             ...actuelles,
@@ -273,8 +302,9 @@ const QuizEtudiant = ({ evaluationId, nom, onClose, onTermine }: Props) => {
 
             <DialogFooter className="items-center gap-2 sm:justify-between">
               <span className="text-xs text-muted-foreground">
-                {nombreRepondues}/{detail.questions.length} question(s)
-                répondue(s)
+                {pretAEnvoyer
+                  ? 'Toutes les questions sont répondues.'
+                  : `Encore ${detail.questions.length - nombreRepondues} question(s) à compléter.`}
               </span>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={onClose}>

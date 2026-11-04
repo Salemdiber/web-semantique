@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import config, db
 from app import parcours_stockage
 from app import quiz as stockage_quiz
-from app.routers import auth, courses, education, gestion, ontologie, parcours, referentiel
+from app.routers import auth, courses, education, gestion, nlp, ontologie, parcours, referentiel
 from app.routers import quiz as routeur_quiz
 
 
@@ -61,6 +61,7 @@ app.include_router(gestion.router, prefix=config.API_PREFIX)
 app.include_router(routeur_quiz.router, prefix=config.API_PREFIX)
 app.include_router(ontologie.router, prefix=config.API_PREFIX)
 app.include_router(auth.router, prefix=config.API_PREFIX)
+app.include_router(nlp.router, prefix=config.API_PREFIX)
 
 
 @app.get("/", tags=["Système"])

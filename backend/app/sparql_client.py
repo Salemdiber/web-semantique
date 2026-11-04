@@ -38,8 +38,13 @@ class FusekiClient:
         wrapper.setQuery(query)
         try:
             response = wrapper.query().convert()
-        except SPARQLWrapperException as exc:  # Fuseki injoignable / erreur HTTP
-            raise FusekiError(f"Fuseki injoignable : {exc}") from exc
+        except (SPARQLWrapperException, OSError) as exc:
+            # URLError (connexion refusée, DNS, timeout) hérite d'OSError
+            # et n'est pas toujours enveloppée par SPARQLWrapperException.
+            detail = str(exc) or repr(exc)
+            raise FusekiError(
+                f"Fuseki injoignable ({self.query_endpoint}) : {detail}"
+            ) from exc
 
         try:
             bindings = response["results"]["bindings"]

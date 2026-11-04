@@ -99,13 +99,14 @@ ORDER BY ?prenom
 
 # ------------------------------------------------------------ Formations ---
 FORMATIONS = PREFIXE + """
-SELECT ?formation ?nom ?duree ?programmeNom ?certificationNom
+SELECT ?formation ?nom ?duree ?description ?programmeNom ?certificationNom
        (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
        (GROUP_CONCAT(DISTINCT COALESCE(?etudiantNom, ""); separator="|") AS ?etudiants)
 WHERE {
     ?formation rdf:type/rdfs:subClassOf* edu:Formation .
     ?formation edu:nomFormation ?nom .
     OPTIONAL { ?formation edu:dureeFormation ?duree }
+    OPTIONAL { ?formation edu:descriptionFormation ?description }
     OPTIONAL {
         ?formation edu:faitPartieDe ?programme.
         ?programme edu:nomProgramme ?programmeNom .
@@ -123,7 +124,7 @@ WHERE {
         ?etudiant edu:prenom ?etudiantNom .
     }
 }
-GROUP BY ?formation ?nom ?duree ?programmeNom ?certificationNom
+GROUP BY ?formation ?nom ?duree ?description ?programmeNom ?certificationNom
 ORDER BY ?nom
 """
 
@@ -381,6 +382,10 @@ WHERE {
     }
     ?classe rdfs:label ?nomClasse.
     ?individu rdf:type/rdfs:subClassOf* ?classe .
+    FILTER (
+        ?classe != edu:Formation
+        || EXISTS { ?individu edu:nomFormation ?nomFormation }
+    )
 }
 GROUP BY ?classe ?nomClasse
 ORDER BY DESC(?nombre)

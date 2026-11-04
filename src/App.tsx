@@ -7,6 +7,7 @@ import ScrollToHash from '@/app/components/ScrollToHash';
 import Home from '@/app/pages/Home';
 import ParcoursPage from '@/app/pages/ParcoursPage';
 import NotFoundPage from '@/app/pages/NotFound';
+import Evaluations from '@/app/components/Evaluations';
 
 /**
  * Layout applicatif + table de routage (React Router).
@@ -21,6 +22,7 @@ export default function App() {
                 <Route path='/' element={<Home />} />
                 <Route path='/parcours' element={<ParcoursPage />} />
                 <Route path='/parcours/:id' element={<ParcoursPage />} />
+                <Route path='/evaluations' element={<Evaluations />} />
                 <Route path='*' element={<NotFoundPage />} />
             </Routes>
             <Footer />

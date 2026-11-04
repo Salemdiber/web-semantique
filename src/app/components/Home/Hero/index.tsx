@@ -64,11 +64,19 @@ const Banner = () => {
                             </a>
                             {!chargement &&
                                 (utilisateur ? (
-                                    <a
-                                        href={DASHBOARD_URL}
-                                        className='bg-white/70 text-primary font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-primary hover:text-white duration-300'>
-                                        Mon tableau de bord
-                                    </a>
+                                    utilisateur.role === 'etudiant' ? (
+                                        <a
+                                            href="/#mes-formations"
+                                            className='bg-white/70 text-primary font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-primary hover:text-white duration-300'>
+                                            Mes formations
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={DASHBOARD_URL}
+                                            className='bg-white/70 text-primary font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-primary hover:text-white duration-300'>
+                                            Mon tableau de bord
+                                        </a>
+                                    )
                                 ) : (
                                     <a
                                         href={`${DASHBOARD_URL}/auth/auth2/login`}

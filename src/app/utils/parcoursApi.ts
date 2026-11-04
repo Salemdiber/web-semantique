@@ -59,6 +59,59 @@ export type ParcoursRecommandationPublic = ParcoursPublic & {
     raisons: string[];
 };
 
+export type EvaluationEtudiant = {
+    id: string;
+    nom: string;
+    type: string | null;
+    cours: string;
+    date: string | null;
+    noteMax: number;
+    noteMin: number;
+    note: number | null;
+    reussi: boolean | null;
+    quizQuestions?: number;
+    quizPasse?: boolean | null;
+};
+
+export type QuizQuestionPublic = {
+    id: number;
+    enonce: string;
+    choix: string[];
+    points: number;
+};
+
+export type QuizDetailPublic = {
+    evaluationId: string;
+    nom: string;
+    cours: string;
+    noteMax: number;
+    noteMin: number;
+    questions: QuizQuestionPublic[];
+    tentative: {
+        note: number;
+        score: number;
+        total: number;
+        tentatives: number;
+    } | null;
+    dejaReussi: boolean;
+};
+
+export type ResultatQuizPublic = {
+    note: number;
+    noteMax: number;
+    noteMin: number;
+    score: number;
+    total: number;
+    reussi: boolean;
+    tentatives: number;
+    corrections: {
+        questionId: number;
+        choix: number;
+        bonneReponse: number;
+        correcte: boolean;
+    }[];
+};
+
 function entetesOptionnelles(): Record<string, string> {
     const jeton = lireJetonSession();
     return jeton ? { Authorization: `Bearer ${jeton}` } : {};
@@ -104,5 +157,32 @@ export const parcoursLandingAPI = {
             { headers: entetesOptionnelles() },
         );
     },
-};
 
+    mesEvaluations: async (): Promise<EvaluationEtudiant[]> => {
+        const res = await axios.get<EvaluationEtudiant[]>(
+            `${API_URL}/education/mes-evaluations`,
+            { headers: entetesOptionnelles() },
+        );
+        return res.data;
+    },
+
+    quizDetail: async (id: string): Promise<QuizDetailPublic> => {
+        const res = await axios.get<QuizDetailPublic>(
+            `${API_URL}/education/quiz/${encodeURIComponent(id)}`,
+            { headers: entetesOptionnelles() },
+        );
+        return res.data;
+    },
+
+    soumettreQuiz: async (
+        id: string,
+        reponses: { question_id: number; choix: number }[],
+    ): Promise<ResultatQuizPublic> => {
+        const res = await axios.post<ResultatQuizPublic>(
+            `${API_URL}/education/quiz/${encodeURIComponent(id)}/soumettre`,
+            { reponses },
+            { headers: entetesOptionnelles() },
+        );
+        return res.data;
+    },
+};

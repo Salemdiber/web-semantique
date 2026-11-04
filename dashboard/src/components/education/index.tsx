@@ -2,6 +2,7 @@ import CatalogueOntologie from 'src/components/education/CatalogueOntologie';
 import OntologieStatistiques from 'src/components/education/OntologieStatistiques';
 import OntologieRaisonneur from 'src/components/education/OntologieRaisonneur';
 import RelationsOntologie from 'src/components/education/RelationsOntologie';
+import TraducteurNLP from 'src/components/education/TraducteurNLP';
 import BreadcrumbComp from 'src/layouts/full/shared/breadcrumb/BreadcrumbComp';
 
 const BCrumb = [
@@ -19,6 +20,9 @@ const EducationAppContent = () => {
     <>
       <BreadcrumbComp title="Ontologie Éducation & Formation" items={BCrumb} />
       <div className="grid grid-cols-12 gap-6">
+        <div className="col-span-12">
+          <TraducteurNLP />
+        </div>
         <div className="col-span-12">
           <OntologieStatistiques />
         </div>

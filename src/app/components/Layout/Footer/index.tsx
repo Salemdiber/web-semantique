@@ -3,6 +3,7 @@ import withBasePath from '@/utils/basePath'
 
 const LIENS = [
     { label: 'Accueil', href: '/#Home' },
+    { label: 'Formations', href: '/#formations-ontologie' },
     { label: 'Cours', href: '/#catalogue-ontologie' },
     { label: 'Formateurs', href: '/#mentors-section' },
 ]

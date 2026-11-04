@@ -73,6 +73,20 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: 'Formations',
+        icon: 'solar:square-academic-cap-linear',
+        url: '/formations',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
+        name: 'Formateurs',
+        icon: 'solar:user-id-linear',
+        url: '/formateurs',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: 'Évaluations & Certifications',
         icon: 'solar:medal-ribbon-star-linear',
         url: '/evaluations',

@@ -2,15 +2,19 @@ import { useEffect, useRef, useState } from 'react'
 import Logo from './Logo'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { Link } from 'react-router'
-import { useSession } from '@/utils/session'
+import { useSession, deconnecterSession } from '@/utils/session'
 
 const DASHBOARD_URL: string =
     import.meta.env.VITE_DASHBOARD_URL ?? 'http://localhost:5173'
+const LOGIN_URL = `${DASHBOARD_URL.replace(/\/$/, '')}/auth/auth2/login`
+const REGISTER_URL = `${DASHBOARD_URL.replace(/\/$/, '')}/auth/auth2/register`
 
 const NAVIGATION = [
     { label: 'Accueil', href: '/#Home' },
+    { label: 'Formations', href: '/#formations-ontologie' },
     { label: 'Cours', href: '/#catalogue-ontologie' },
     { label: 'Parcours', href: '/#parcours-section' },
+    { label: 'Quiz', href: '/evaluations' },
     { label: 'Formateurs', href: '/#mentors-section' },
 ]
 
@@ -19,6 +23,11 @@ const Header: React.FC = () => {
     const [sticky, setSticky] = useState(false)
     const mobileMenuRef = useRef<HTMLDivElement>(null)
     const { utilisateur, chargement, prenom } = useSession()
+
+    const deconnecter = () => {
+        deconnecterSession()
+        window.location.reload()
+    }
 
     useEffect(() => {
         const handleScroll = () => setSticky(window.scrollY >= 10)
@@ -69,21 +78,35 @@ const Header: React.FC = () => {
                                     <span className='hidden lg:block text-sm font-medium text-gray-700'>
                                         Bonjour, {prenom}
                                     </span>
-                                    <a
-                                        href={DASHBOARD_URL}
-                                        className='hidden lg:block bg-primary text-white text-base font-semibold hover:bg-transparent duration-300 hover:text-primary border-2 border-primary px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg'>
-                                        Mon espace
-                                    </a>
+                                    {utilisateur.role === 'etudiant' ? (
+                                        <a
+                                            href="/#mes-formations"
+                                            className='hidden lg:block bg-primary text-white text-base font-semibold hover:bg-transparent duration-300 hover:text-primary border-2 border-primary px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg'>
+                                            Mes formations
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={DASHBOARD_URL}
+                                            className='hidden lg:block bg-primary text-white text-base font-semibold hover:bg-transparent duration-300 hover:text-primary border-2 border-primary px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg'>
+                                            Mon espace
+                                        </a>
+                                    )}
+                                    <button
+                                        type='button'
+                                        onClick={deconnecter}
+                                        className='hidden lg:block text-sm font-medium text-primary hover:text-gray-900'>
+                                        Se déconnecter
+                                    </button>
                                 </>
                             ) : (
                                 <>
                                     <a
-                                        href={`${DASHBOARD_URL}/auth/auth2/login`}
+                                        href={LOGIN_URL}
                                         className='hidden lg:block bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-white duration-300 px-6 py-2.5 rounded-lg font-semibold transition-all shadow-sm hover:shadow-md'>
                                         Se connecter
                                     </a>
                                     <a
-                                        href={`${DASHBOARD_URL}/auth/auth2/register`}
+                                        href={REGISTER_URL}
                                         className='hidden lg:block bg-primary text-white text-base font-semibold hover:bg-transparent duration-300 hover:text-primary border-2 border-primary px-6 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg'>
                                         Créer un compte
                                     </a>
@@ -132,23 +155,47 @@ const Header: React.FC = () => {
                                 {item.label}
                             </Link>
                         ))}
+                        {utilisateur?.role === 'etudiant' && (
+                            <Link
+                                to="/#mes-formations"
+                                onClick={() => setNavbarOpen(false)}
+                                className='w-full py-2.5 text-base font-medium text-black hover:text-primary'>
+                                Mes formations
+                            </Link>
+                        )}
                         <div className='mt-4 flex flex-col gap-4 w-full'>
                             {!chargement &&
                                 (utilisateur ? (
-                                    <a
-                                        href={DASHBOARD_URL}
-                                        className='text-center bg-primary text-white px-4 py-2 rounded-lg border border-primary hover:text-primary hover:bg-transparent transition duration-300'>
-                                        Mon espace ({prenom})
-                                    </a>
+                                    <>
+                                        {utilisateur.role === 'etudiant' ? (
+                                            <a
+                                                href="/#mes-formations"
+                                                className='text-center bg-primary text-white px-4 py-2 rounded-lg border border-primary hover:text-primary hover:bg-transparent transition duration-300'>
+                                                Mes formations ({prenom})
+                                            </a>
+                                        ) : (
+                                            <a
+                                                href={DASHBOARD_URL}
+                                                className='text-center bg-primary text-white px-4 py-2 rounded-lg border border-primary hover:text-primary hover:bg-transparent transition duration-300'>
+                                                Mon espace ({prenom})
+                                            </a>
+                                        )}
+                                        <button
+                                            type='button'
+                                            onClick={deconnecter}
+                                            className='text-center text-primary px-4 py-2 rounded-lg border border-primary hover:bg-primary hover:text-white transition duration-300'>
+                                            Se déconnecter
+                                        </button>
+                                    </>
                                 ) : (
                                     <>
                                         <a
-                                            href={`${DASHBOARD_URL}/auth/auth2/login`}
+                                            href={LOGIN_URL}
                                             className='text-center bg-transparent text-primary border border-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition duration-300'>
                                             Se connecter
                                         </a>
                                         <a
-                                            href={`${DASHBOARD_URL}/auth/auth2/register`}
+                                            href={REGISTER_URL}
                                             className='text-center bg-primary text-white px-4 py-2 rounded-lg border border-primary hover:text-primary hover:bg-transparent transition duration-300'>
                                             Créer un compte
                                         </a>

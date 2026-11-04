@@ -128,6 +128,67 @@ async def lister_formations() -> list[dict[str, Any]]:
     return [row_to_formation(row) for row in exec_(FORMATIONS)]
 
 
+@router.get(
+    "/mes-formations",
+    summary="Lister les formations liées à l'utilisateur connecté",
+)
+def mes_formations(
+    utilisateur: Annotated[dict[str, Any], Depends(utilisateur_courant)],
+) -> list[dict[str, Any]]:
+    if utilisateur.get("role") not in ("etudiant", "formateur"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Réservé aux étudiants et aux formateurs",
+        )
+
+    compte = f"{EDU}compte_{int(utilisateur['id'])}"
+    filtre = f"<{compte}> edu:suitFormation ?formation ."
+    if utilisateur.get("role") == "formateur":
+        nom = str(utilisateur.get("nom", "")).replace("\\", "\\\\").replace('"', '\\"')
+        filtre = f"""
+        ?formateur edu:enseigne ?coursDuFormateur ;
+                   edu:prenom ?prenomFormateur .
+        FILTER (
+            ?formateur = <{compte}> ||
+            LCASE(STR(?prenomFormateur)) = LCASE("{nom}")
+        )
+        ?formation edu:contientCours ?coursDuFormateur .
+        """
+
+    query = PREFIX + f"""
+    SELECT ?formation ?nom ?duree ?description ?programmeNom ?certificationNom
+           (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
+           (GROUP_CONCAT(DISTINCT COALESCE(?etudiantNom, ""); separator="|") AS ?etudiants)
+    WHERE {{
+        {filtre}
+        ?formation edu:nomFormation ?nom .
+        OPTIONAL {{ ?formation edu:dureeFormation ?duree }}
+        OPTIONAL {{ ?formation edu:descriptionFormation ?description }}
+        OPTIONAL {{
+            ?formation edu:faitPartieDe ?programme .
+            ?programme edu:nomProgramme ?programmeNom
+        }}
+        OPTIONAL {{
+            ?formation edu:meneVers ?certification .
+            ?certification edu:nomCertification ?certificationNom
+        }}
+        OPTIONAL {{
+            ?formation edu:contientCours ?crs .
+            ?crs edu:nomCours ?coursNom
+        }}
+        OPTIONAL {{
+            ?etudiant edu:suitFormation ?formation .
+            ?etudiant edu:prenom ?etudiantNom
+        }}
+    }}
+    GROUP BY ?formation ?nom ?duree ?description ?programmeNom
+             ?certificationNom
+    ORDER BY ?nom
+    """
+    formations = [row_to_formation(row) for row in exec_(query)]
+    return formations
+
+
 @router.get("/competences", summary="Lister les compétences")
 async def lister_competences() -> list[dict[str, Any]]:
     return [row_to_competence(row) for row in exec_(COMPETENCES)]
@@ -148,12 +209,38 @@ async def lister_programmes() -> list[dict[str, Any]]:
 
 @router.get("/evaluations", summary="Lister les évaluations (examens, quiz)")
 async def lister_evaluations(
-    _: Annotated[dict[str, Any], Depends(acces_encadrant)],
+    utilisateur: Annotated[dict[str, Any], Depends(acces_encadrant)],
 ) -> list[dict[str, Any]]:
     """Liste complète réservée aux encadrants : un étudiant passe par
     `/mes-evaluations` pour ne voir que ses propres résultats.
     """
-    return _annoter_quiz(_fusionner_evaluations(exec_(EVALUATIONS)))
+    evaluations = _fusionner_evaluations(exec_(EVALUATIONS))
+    if utilisateur.get("role") == "formateur":
+        nom = str(utilisateur.get("nom", "")).replace("\\", "\\\\").replace('"', '\\"')
+        compte = f"{EDU}compte_{int(utilisateur['id'])}"
+        cours = {
+            row.get("cours")
+            for row in exec_(
+                PREFIX
+                + f"""
+                SELECT DISTINCT ?cours WHERE {{
+                    ?formateur edu:enseigne ?cours ;
+                               edu:prenom ?prenomFormateur .
+                    FILTER (
+                        ?formateur = <{compte}> ||
+                        LCASE(STR(?prenomFormateur)) = LCASE("{nom}")
+                    )
+                }}
+                """
+            )
+            if row.get("cours")
+        }
+        evaluations = [
+            evaluation
+            for evaluation in evaluations
+            if evaluation.get("coursId") in cours
+        ]
+    return _annoter_quiz(evaluations)
 
 
 @router.get(
@@ -247,6 +334,67 @@ def _annoter_quiz(
 @router.get("/certifications", summary="Lister les certifications")
 async def lister_certifications() -> list[dict[str, Any]]:
     return [row_to_certification(r) for r in exec_(CERTIFICATIONS)]
+
+
+@router.get(
+    "/mes-certifications",
+    summary="Lister les certifications liées aux cours du formateur",
+)
+def mes_certifications(
+    utilisateur: Annotated[dict[str, Any], Depends(utilisateur_courant)],
+) -> list[dict[str, Any]]:
+    if utilisateur.get("role") != "formateur":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Réservé aux formateurs",
+        )
+    compte = f"{EDU}compte_{int(utilisateur['id'])}"
+    nom = (
+        str(utilisateur.get("nom", ""))
+        .replace("\\", "\\\\")
+        .replace('"', '\\"')
+    )
+    cours = exec_(
+        PREFIX
+        + f"""
+        SELECT DISTINCT ?cours WHERE {{
+            ?formateur edu:enseigne ?cours ;
+                       edu:prenom ?prenomFormateur .
+            FILTER (
+                ?formateur = <{compte}> ||
+                LCASE(STR(?prenomFormateur)) = LCASE("{nom}")
+            )
+        }}
+        """
+    )
+    ids_cours = {ecriture.nom_local(row["cours"]) for row in cours if row.get("cours")}
+    if not ids_cours:
+        return []
+    valeurs = " ".join(f"<{EDU}{identifiant}>" for identifiant in ids_cours)
+    ids = exec_(
+        PREFIX
+        + f"""
+        SELECT DISTINCT ?certification WHERE {{
+            {{
+                ?formation edu:meneVers ?certification ;
+                           edu:contientCours ?cours .
+                VALUES ?cours {{ {valeurs} }}
+            }} UNION {{
+                ?certification edu:certifieEvaluation ?evaluation .
+                ?evaluation edu:porteSur ?cours .
+                VALUES ?cours {{ {valeurs} }}
+            }}
+        }}
+        """
+    )
+    certifications = {
+        row.get("certification") for row in ids if row.get("certification")
+    }
+    return [
+        row_to_certification(row)
+        for row in exec_(CERTIFICATIONS)
+        if row.get("certification") in certifications
+    ]
 
 
 @router.get("/statistiques", summary="Compteurs par classe de l'ontologie")
@@ -388,6 +536,7 @@ def row_to_formation(row: dict[str, Any]) -> dict[str, Any]:
         "id": row.get("formation"),
         "nom": row.get("nom"),
         "duree": row.get("duree") or "Durée non précisée",
+        "description": row.get("description"),
         "programme": row.get("programmeNom"),
         "certification": row.get("certificationNom"),
         "cours": split(row.get("cours")),

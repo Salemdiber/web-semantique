@@ -20,6 +20,8 @@ const Education = Loadable(lazy(() => import('../views/education/Education')));
 const Courses = Loadable(lazy(() => import('../views/courses/Courses')));
 const Competences = Loadable(lazy(() => import('../views/competences/Competences')));
 const Parcours = Loadable(lazy(() => import('../views/parcours/Parcours')));
+const Formations = Loadable(lazy(() => import('../views/formations/Formations')));
+const Formateurs = Loadable(lazy(() => import('../views/formateurs/Formateurs')));
 const Utilisateurs = Loadable(lazy(() => import('../views/users/Users')));
 const Evaluations = Loadable(lazy(() => import('../views/evaluations/Evaluations')));
 
@@ -38,6 +40,15 @@ const Router = [
       { path: '/competences', element: <Competences /> },
       { path: '/parcours', element: <Parcours /> },
       { path: '/parcours/:id', element: <Parcours /> },
+      { path: '/formations', element: <Formations /> },
+      {
+        path: '/formateurs',
+        element: (
+          <RequireAuth roles={['admin']}>
+            <Formateurs />
+          </RequireAuth>
+        ),
+      },
       { path: '/evaluations', element: <Evaluations /> },
       {
         path: '/utilisateurs',

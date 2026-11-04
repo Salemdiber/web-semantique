@@ -28,6 +28,7 @@ import type {
   QuizDetail,
   ResultatQuiz,
   QuestionsQuizAdmin,
+  TraductionNLP,
 } from 'src/types/apps/education';
 import { jetonStocke } from 'src/api/auth/auth-data';
 
@@ -124,6 +125,23 @@ export type CertificationEntree = {
   etudiants?: string[];
 };
 
+/** Corps attendu par POST/PUT /api/education/formations. */
+export type FormationEntree = {
+  nom: string;
+  duree: string;
+  description?: string | null;
+  cours?: string[];
+  programme?: string | null;
+  certification?: string | null;
+};
+
+/** Corps attendu par POST/PUT /api/education/formateurs. */
+export type FormateurEntree = {
+  prenom: string;
+  domaine?: string | null;
+  cours?: string[];
+};
+
 export type CompetenceEntree = {
   nom: string;
   niveau?: string | null;
@@ -157,6 +175,16 @@ export type ParcoursFiltres = {
 };
 
 export const educationAPI = {
+  /** POST /api/nlp/traduire — question naturelle vers SPARQL */
+  traduireQuestion: async (
+    question: string,
+    executer = true,
+  ): Promise<TraductionNLP> =>
+    demander('/nlp/traduire', {
+      method: 'POST',
+      body: JSON.stringify({ question, executer }),
+    }),
+
   /** GET /api/education/sante — disponibilité Fuseki */
   sante: async (): Promise<{ statut: string; dataset: number }> =>
     demander('/education/sante'),
@@ -202,6 +230,10 @@ export const educationAPI = {
   /** GET /api/education/formations */
   formations: async (): Promise<Formation[]> =>
     demander('/education/formations'),
+
+  /** GET /api/education/mes-formations — formations du compte connecté */
+  mesFormations: async (): Promise<Formation[]> =>
+    demanderAvecJeton('/education/mes-formations'),
 
   /** GET /api/education/competences */
   competences: async (): Promise<Competence[]> =>
@@ -346,6 +378,10 @@ export const educationAPI = {
   certifications: async (): Promise<CertificationType[]> =>
     demander('/education/certifications'),
 
+  /** GET /api/education/mes-certifications — certifications du formateur */
+  mesCertifications: async (): Promise<CertificationType[]> =>
+    demanderAvecJeton('/education/mes-certifications'),
+
   /** GET /api/education/statistiques */
   statistiques: async (): Promise<Statistique[]> =>
     demander('/education/statistiques'),
@@ -447,6 +483,48 @@ export const educationAPI = {
       `/education/certifications/${encodeURIComponent(id)}`,
       'DELETE',
     );
+  },
+
+  /* -------------------------------------------- module Formations & formateurs --- */
+
+  /** POST /api/education/formations */
+  creerFormation: async (donnees: FormationEntree): Promise<Formation> =>
+    envoyer('/education/formations', 'POST', donnees),
+
+  /** PUT /api/education/formations/:id */
+  modifierFormation: async (
+    id: string,
+    donnees: FormationEntree,
+  ): Promise<Formation> =>
+    envoyer(
+      `/education/formations/${encodeURIComponent(id)}`,
+      'PUT',
+      donnees,
+    ),
+
+  /** DELETE /api/education/formations/:id */
+  supprimerFormation: async (id: string): Promise<void> => {
+    await envoyer(`/education/formations/${encodeURIComponent(id)}`, 'DELETE');
+  },
+
+  /** POST /api/education/formateurs */
+  creerFormateur: async (donnees: FormateurEntree): Promise<Formateur> =>
+    envoyer('/education/formateurs', 'POST', donnees),
+
+  /** PUT /api/education/formateurs/:id */
+  modifierFormateur: async (
+    id: string,
+    donnees: FormateurEntree,
+  ): Promise<Formateur> =>
+    envoyer(
+      `/education/formateurs/${encodeURIComponent(id)}`,
+      'PUT',
+      donnees,
+    ),
+
+  /** DELETE /api/education/formateurs/:id */
+  supprimerFormateur: async (id: string): Promise<void> => {
+    await envoyer(`/education/formateurs/${encodeURIComponent(id)}`, 'DELETE');
   },
 };
 

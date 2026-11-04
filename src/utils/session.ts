@@ -29,6 +29,12 @@ export const lireJetonSession = (): string | null => {
     return decodeURIComponent(brut.slice(CLE_COOKIE.length + 1));
 };
 
+/** Efface le jeton partagé (cookie + localStorage) pour déconnecter l'utilisateur. */
+export const deconnecterSession = (): void => {
+    localStorage.removeItem('si-education-jeton');
+    document.cookie = `${CLE_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+};
+
 export const useSession = () => {
     const [utilisateur, setUtilisateur] = useState<UtilisateurSession | null>(
         null
