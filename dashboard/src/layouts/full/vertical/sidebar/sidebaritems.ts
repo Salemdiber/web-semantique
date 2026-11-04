@@ -59,6 +59,13 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: 'Compétences & prérequis',
+        icon: 'solar:graph-new-linear',
+        url: '/competences',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: "Parcours d'apprentissage",
         icon: 'solar:routing-2-linear',
         url: '/parcours',

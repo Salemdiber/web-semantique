@@ -10,7 +10,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import Search from './Search';
 
 const SITE_URL: string =
-  import.meta.env.VITE_FRONT_URL ?? 'http://localhost:3010';
+  import.meta.env.VITE_FRONT_URL ?? 'http://localhost:3001';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();

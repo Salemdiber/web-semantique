@@ -129,8 +129,9 @@ ORDER BY ?nom
 
 # ------------------------------------------------------------ Compétences ---
 COMPETENCES = PREFIXE + """
-SELECT ?competence ?nom ?niveau ?typeLabel
+SELECT ?competence ?nom ?niveau (SAMPLE(?typeLabel) AS ?typeAgr)
        (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
+       (GROUP_CONCAT(DISTINCT COALESCE(?coursId, ""); separator="|") AS ?coursIds)
        (GROUP_CONCAT(DISTINCT COALESCE(?prerequisNom, ""); separator="|") AS ?prerequis)
 WHERE {
     ?competence rdf:type/rdfs:subClassOf* edu:Competence .
@@ -144,13 +145,14 @@ WHERE {
     OPTIONAL {
         ?crs edu:developpeCompetence ?competence .
         ?crs edu:nomCours ?coursNom .
+        BIND(STR(?crs) AS ?coursId)
     }
     OPTIONAL {
         ?pre edu:necessiteCompetence ?competence .
         ?pre edu:descriptionPrerequis ?prerequisNom .
     }
 }
-GROUP BY ?competence ?nom ?niveau ?typeLabel
+GROUP BY ?competence ?nom ?niveau
 ORDER BY ?nom
 """
 

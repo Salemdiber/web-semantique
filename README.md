@@ -1,118 +1,34 @@
-# Mercan Voyages
+# Si Educational Free ReactJS Landing Page Template
 
-Site français d'une agence de voyage tunisienne, réalisé avec Express, des vues
-HTML/EJS, Bootstrap 5, CSS personnalisé, JavaScript natif et MongoDB Atlas.
+> 🧠 **Intégration sémantique** : le catalogue des cours et le module **Gestion des parcours d'apprentissage** (`edu:ParcoursApprentissage`, front-office `:3001` + back-office `:5173`) sont alimentés par l'ontologie OWL Éducation & Formation via FastAPI + SPARQL + Apache Jena Fuseki (`OWLFBRuleReasoner`) et SQLite. Voir [`INTEGRATION.md`](./INTEGRATION.md) et [`project_info.txt`](./project_info.txt).
 
-## Arborescence
+#### Preview
 
-```text
-admin/                 Interface d'administration et gestion des contenus
-db/
-  mongo.js             Connexion Atlas, index et identifiants séquentiels
-  session-store.js     Sessions Express persistées dans MongoDB
-  seed.js              Création des données de démonstration et du compte admin
-  migrate-mysql-to-mongo.js  Import ponctuel des données MySQL existantes
-  schema.sql           Ancien schéma MySQL, conservé pour l’import
-middleware/            Contrôles de session et de rôle
-public/
-  css/                 Styles responsives et thèmes clair/sombre
-  js/                  Interactions accessibles côté navigateur
-  images/              Logo remplaçable et images locales
-  uploads/             Images ajoutées depuis l'administration
-routes/                Pages publiques, authentification et API
-views/
-  admin/               Vues de connexion et de gestion
-  partials/            En-tête, navigation et pied de page
-  pages/               Pages rendues côté serveur
-server.js              Configuration Express et démarrage HTTP
-.env.example           Configuration locale documentée
+ - [Demo](https://themewagon.github.io/si-education/)
+
+#### Download
+ - [Download from ThemeWagon](https://themewagon.com/themes/si-education/)
+
+## Getting Started
+
+1. Start the full semantic stack (Fuseki + FastAPI + Landing + Dashboard on Windows):
+```powershell
+.\start-all.ps1
 ```
-
-## Données MongoDB
-
-La base configurée par `MONGODB_DB_NAME` utilise les collections `users`,
-`hotels`, `packages`, `requests`, `contact_messages`,
-`newsletter_subscribers`, `slides`, `partners` et `sessions`. Les galeries,
-programmes et listes sont enregistrés comme tableaux/documents MongoDB ; un
-prix `null` signifie « Sur demande ». Des index uniques protègent les e-mails
-et les slugs. Les identifiants numériques sont conservés pour maintenir les
-liens entre demandes, comptes et offres.
-
-## Installation et lancement
-
-1. Créer un cluster MongoDB Atlas, un utilisateur de base de données et
-   autoriser l’adresse IP du serveur dans l’Access List Atlas.
-2. Copier `.env.example` en `.env`, puis renseigner `MONGODB_URI`,
-   `MONGODB_DB_NAME` (par défaut `mercan_voyages`), un `SESSION_SECRET` long et un mot de passe
-   administrateur robuste. Si le mot de passe Atlas contient des caractères
-   spéciaux, encoder ceux-ci dans l’URI.
-   `WHATSAPP_NUMBER` est facultatif et utilise par défaut le WhatsApp de
-   l’agence (`21655333100`). Pour tester les demandes sur votre téléphone,
-   indiquez le numéro au format international sans `+` ni espaces.
-3. Installer les dépendances : `npm install`.
-4. Insérer les exemples : `npm run seed`.
-5. Lancer le serveur : `npm start`, puis ouvrir `http://localhost:3000`.
-
-L'administration est accessible à `/admin`. Le premier compte administrateur
-est créé par la commande seed à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD`.
-Les clients connectés comme les administrateurs accèdent à `/parametres-compte`
-pour modifier leurs informations de profil et leur mot de passe.
-Les liens vers `/hotels` et les fiches `/hotels/:slug` redirigent vers MyGo.
-Configurez `MYGO_HOTELS_URL` avec le lien fourni par le partenaire si celui-ci
-contient un code Mercan ou une destination spécifique ; à défaut, le site
-utilise `https://www.mygo.co/`.
-Le lien « Mot de passe oublié ? » envoie un lien de réinitialisation à usage
-unique, valable 30 minutes. Pour l’activer, configurez `APP_URL`, `MAIL_USER`
-et `MAIL_APP_PASSWORD` dans `.env` (ou dans les variables d’environnement
-Vercel). `MAIL_USER` doit être un compte Gmail avec la validation en deux étapes
-activée ; `MAIL_APP_PASSWORD` doit être un mot de passe d’application Google,
-pas le mot de passe normal du compte. Ne partagez ni ne commitez ces valeurs.
-
-## Importer l’ancienne base MySQL
-
-Pour conserver les comptes, offres, demandes, messages, inscriptions, slides,
-partenaires et sessions existants, gardez temporairement l’ancienne base
-MySQL accessible. Dans `.env`, renseignez aussi `DB_HOST`, `DB_PORT`, `DB_NAME`,
-`DB_USER` et `DB_PASSWORD`, puis exécutez **avant** le seed :
+2. Or install and run the Landing development server standalone:
 
 ```bash
-npm run migrate:mysql-to-mongo
-npm run seed
+npm i
+npm run dev
 ```
 
-La commande de migration copie les identifiants et dates existants et peut
-être relancée après une importation partielle. Elle ne supprime ni ne modifie
-les données MySQL. Après vérification des données sur Atlas, les variables
-`DB_*` et MySQL peuvent être retirés du déploiement. `mysql2` reste uniquement
-installé pour cet outil d’import.
+## Author 
+```
+Design and code is completely written by GetNextJs Templates.com and development team. 
+```
 
-## Déploiement sur Vercel
+## License
 
-`server.js` exporte l’application Express pour permettre sa détection et son
-déploiement automatique sur Vercel. Les fichiers présents dans `public/` sont
-servis par Vercel ; les nouvelles images envoyées depuis l’administration sont
-enregistrées dans Vercel Blob plutôt que sur le disque temporaire des Functions.
-
-1. Pousser le projet sur un dépôt Git et l’importer depuis le tableau de bord
-   Vercel. Le framework Express est détecté automatiquement.
-2. Créer un store Blob public dans **Storage** et le connecter au projet
-   Vercel pour activer l’authentification OIDC des uploads. Pour le
-   développement local, renseigner `BLOB_READ_WRITE_TOKEN` dans `.env`.
-3. Ajouter dans **Settings > Environment Variables** : `MONGODB_URI`,
-   `MONGODB_DB_NAME=mercan_voyages`, `SESSION_SECRET` (au moins 32 caractères),
-   `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `APP_URL`, `MAIL_USER` et
-   `MAIL_APP_PASSWORD`. Vercel configure l’environnement de
-   production automatiquement. Ne pas ajouter de secrets au dépôt Git ni les
-   envoyer dans un message.
-4. Vérifier que la liste d’accès réseau Atlas autorise les connexions depuis
-   le déploiement, puis lancer le déploiement.
-5. Exécuter `npm run seed` une seule fois depuis un environnement local
-   connecté à Atlas afin de créer les exemples et le compte administrateur.
-
-Les uploads de l’administration sont limités à 4 Mo pour rester sous la limite
-de requête des Functions Vercel. Si Blob n’est pas configuré, l’endpoint
-d’upload renvoie une erreur explicite au lieu de perdre les fichiers dans le
-disque éphémère.
-
-La limitation des requêtes utilise le stockage mémoire d’Express : sur Vercel,
-elle s’applique par instance et non globalement entre toutes les Functions.
+ - Design and Code is Copyright &copy; [GetNextJs Templates.com](https://adminmart.com/)
+ - Licensed cover under [MIT]
+ - Distributed by [ThemeWagon](https://themewagon.com)
