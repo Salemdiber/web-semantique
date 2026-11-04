@@ -27,7 +27,11 @@ const renderSidebarItems = (
   isSubItem: boolean = false,
 ) => {
   return items.map((item) => {
-    const isSelected = currentPath === item?.url;
+    const isSelected =
+      currentPath === item?.url ||
+      (Boolean(item?.url) &&
+        item.url !== '/' &&
+        currentPath.startsWith(`${item.url}/`));
     const IconComp = item.icon || null;
 
     const iconElement = IconComp ? (
@@ -100,18 +104,22 @@ const SidebarLayout = ({ onClose }: { onClose?: () => void }) => {
   const { utilisateur } = useAuth();
 
   // La gestion des comptes est réservée aux administrateurs ; le libellé du
-  // menu des évaluations s'adapte au rôle (vue personnelle de l'étudiant).
+  // menu des évaluations et des parcours s'adapte au rôle étudiant.
   const sections = SidebarContent.map((section) => ({
     ...section,
     children: section.children
       ?.filter(
         (item) => item.url !== '/utilisateurs' || utilisateur?.role === 'admin',
       )
-      .map((item) =>
-        item.url === '/evaluations' && utilisateur?.role === 'etudiant'
-          ? { ...item, name: 'Mes évaluations & quiz' }
-          : item,
-      ),
+      .map((item) => {
+        if (item.url === '/evaluations' && utilisateur?.role === 'etudiant') {
+          return { ...item, name: 'Mes évaluations & quiz' };
+        }
+        if (item.url === '/parcours' && utilisateur?.role === 'etudiant') {
+          return { ...item, name: 'Mes parcours' };
+        }
+        return item;
+      }),
   }));
 
   // Only allow "light" or "dark" for AMSidebar

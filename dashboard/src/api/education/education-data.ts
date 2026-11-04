@@ -15,6 +15,11 @@ import type {
   Statistique,
   Programme,
   Parcours,
+  ParcoursAnalyse,
+  ParcoursRecommandation,
+  ParcoursStatistiques,
+  NiveauParcours,
+  StatutParcours,
   RelationCoursCompetence,
   TypeInferes,
   QuizDetail,
@@ -84,7 +89,7 @@ async function envoyer<T>(
   });
 }
 
-/** Lecture authentifiée (quiz, résultats personnels). */
+/** Lecture authentifiée (quiz, résultats personnels, parcours selon rôle). */
 async function demanderAvecJeton<T>(path: string): Promise<T> {
   const jeton = jetonStocke.lire();
   return demander<T>(path, {
@@ -114,6 +119,24 @@ export type CertificationEntree = {
   seuil?: number;
   date_obtention?: string | null;
   etudiants?: string[];
+};
+
+export type ParcoursEntree = {
+  nom: string;
+  description?: string | null;
+  objectif?: string | null;
+  niveau: NiveauParcours;
+  statut: StatutParcours;
+  cours_ids?: string[];
+};
+
+export type ParcoursFiltres = {
+  niveau?: string;
+  q?: string;
+  competence?: string;
+  statut?: string;
+  tri?: 'nom' | 'duree' | 'cours' | 'inscrits';
+  ordre?: 'asc' | 'desc';
 };
 
 export const educationAPI = {
@@ -147,8 +170,112 @@ export const educationAPI = {
   programmes: async (): Promise<Programme[]> =>
     demander('/education/programmes'),
 
-  /** GET /api/education/parcours */
-  parcours: async (): Promise<Parcours[]> => demander('/education/parcours'),
+  /* ------------------------------------ parcours d'apprentissage --- */
+
+  /** GET /api/education/parcours — liste enrichie avec filtres */
+  parcours: async (filtres?: ParcoursFiltres): Promise<Parcours[]> => {
+    const params = new URLSearchParams();
+    if (filtres?.niveau) params.set('niveau', filtres.niveau);
+    if (filtres?.q) params.set('q', filtres.q);
+    if (filtres?.competence) params.set('competence', filtres.competence);
+    if (filtres?.statut) params.set('statut', filtres.statut);
+    if (filtres?.tri) params.set('tri', filtres.tri);
+    if (filtres?.ordre) params.set('ordre', filtres.ordre);
+    const qs = params.toString();
+    return demanderAvecJeton(`/education/parcours${qs ? `?${qs}` : ''}`);
+  },
+
+  /** GET /api/education/parcours/:id — détail complet et progression */
+  parcoursDetail: async (id: string): Promise<Parcours> =>
+    demanderAvecJeton(`/education/parcours/${encodeURIComponent(id)}`),
+
+  /** POST /api/education/parcours — création (admin) */
+  creerParcours: async (donnees: ParcoursEntree): Promise<Parcours> =>
+    envoyer('/education/parcours', 'POST', donnees),
+
+  /** PUT /api/education/parcours/:id — mise à jour (admin) */
+  modifierParcours: async (
+    id: string,
+    donnees: ParcoursEntree,
+  ): Promise<Parcours> =>
+    envoyer(`/education/parcours/${encodeURIComponent(id)}`, 'PUT', donnees),
+
+  /** PUT /api/education/parcours/:id/cours — réordonner/remplacer les cours (admin) */
+  reordonnerCoursParcours: async (
+    id: string,
+    coursIds: string[],
+  ): Promise<Parcours> =>
+    envoyer(`/education/parcours/${encodeURIComponent(id)}/cours`, 'PUT', {
+      cours_ids: coursIds,
+    }),
+
+  /** POST /api/education/parcours/:id/cours — ajouter un cours (admin) */
+  ajouterCoursParcours: async (
+    id: string,
+    coursId: string,
+    position?: number,
+  ): Promise<Parcours> =>
+    envoyer(`/education/parcours/${encodeURIComponent(id)}/cours`, 'POST', {
+      cours_id: coursId,
+      position,
+    }),
+
+  /** DELETE /api/education/parcours/:id/cours/:coursId — retirer un cours (admin) */
+  retirerCoursParcours: async (
+    id: string,
+    coursId: string,
+  ): Promise<Parcours> =>
+    envoyer(
+      `/education/parcours/${encodeURIComponent(id)}/cours/${encodeURIComponent(coursId)}`,
+      'DELETE',
+    ),
+
+  /** POST /api/education/parcours/:id/dupliquer — dupliquer en brouillon (admin) */
+  dupliquerParcours: async (id: string): Promise<Parcours> =>
+    envoyer(
+      `/education/parcours/${encodeURIComponent(id)}/dupliquer`,
+      'POST',
+    ),
+
+  /** DELETE /api/education/parcours/:id — suppression complète (admin) */
+  supprimerParcours: async (
+    id: string,
+  ): Promise<{ statut: string; id: string; inscriptionsSupprimees: number }> =>
+    envoyer(`/education/parcours/${encodeURIComponent(id)}`, 'DELETE'),
+
+  /** GET /api/education/parcours/:id/analyse — analyse de cohérence & tri topologique */
+  analyserParcours: async (id: string): Promise<ParcoursAnalyse> =>
+    demanderAvecJeton(
+      `/education/parcours/${encodeURIComponent(id)}/analyse`,
+    ),
+
+  /** GET /api/education/parcours/statistiques — indicateurs ApexCharts (admin/formateur) */
+  statistiquesParcours: async (): Promise<ParcoursStatistiques> =>
+    demanderAvecJeton('/education/parcours/statistiques'),
+
+  /** GET /api/education/parcours/mes-parcours — parcours suivis (étudiant) */
+  mesParcours: async (): Promise<Parcours[]> =>
+    demanderAvecJeton('/education/parcours/mes-parcours'),
+
+  /** GET /api/education/parcours/recommandations — parcours recommandés (étudiant) */
+  recommandationsParcours: async (): Promise<ParcoursRecommandation[]> =>
+    demanderAvecJeton('/education/parcours/recommandations'),
+
+  /** POST /api/education/parcours/:id/inscription — s'inscrire (étudiant) */
+  inscrireParcours: async (id: string): Promise<Parcours> =>
+    envoyer(
+      `/education/parcours/${encodeURIComponent(id)}/inscription`,
+      'POST',
+    ),
+
+  /** DELETE /api/education/parcours/:id/inscription — se désinscrire (étudiant) */
+  desinscrireParcours: async (
+    id: string,
+  ): Promise<{ statut: string; parcoursId: string; coursRetiresSuitCours: string[] }> =>
+    envoyer(
+      `/education/parcours/${encodeURIComponent(id)}/inscription`,
+      'DELETE',
+    ),
 
   /** GET /api/education/evaluations — liste complète (admin/formateur) */
   evaluations: async (): Promise<Evaluation[]> => {

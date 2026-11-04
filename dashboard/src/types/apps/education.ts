@@ -53,10 +53,187 @@ export type Programme = {
   formations: string[];
 };
 
+export type NiveauParcours = 'Debutant' | 'Avance';
+export type StatutParcours = 'brouillon' | 'publie';
+export type StatutCoursEtudiant = 'non_commence' | 'en_cours' | 'termine';
+
+export type ParcoursPrerequisDetail = {
+  id: string;
+  description: string;
+  niveauRequis: string | null;
+  competenceId: string | null;
+  competenceNom: string | null;
+  competenceNiveau: string | null;
+};
+
+export type ParcoursCompetenceDetail = {
+  id: string;
+  nom: string;
+  niveau: string | null;
+};
+
+export type ParcoursEtape = {
+  position: number;
+  id: string;
+  nom: string;
+  duree: string;
+  dureeHeures: number;
+  description: string | null;
+  type: string;
+  prerequis: string[];
+  prerequisDetails: ParcoursPrerequisDetail[];
+  competences: string[];
+  competencesDetails: ParcoursCompetenceDetail[];
+  formateurs: string[];
+  introuvable?: boolean;
+  statutEtudiant?: StatutCoursEtudiant;
+  noteObtenue?: number | null;
+  noteMax?: number | null;
+  evaluationsCount?: number;
+};
+
+export type ProchainCoursParcours = {
+  id: string;
+  nom: string;
+  position: number;
+  duree: string;
+  statutEtudiant: StatutCoursEtudiant;
+};
+
+export type ParcoursCertificationLiee = {
+  id: string;
+  nom: string | null;
+  organisme: string | null;
+  type: string;
+  competence: string | null;
+  seuil: number | null;
+};
+
+export type ParcoursInscrit = {
+  id: number;
+  utilisateurId: number;
+  nom: string;
+  email: string;
+  parcoursId: string;
+  statut: string;
+  creeLe: string;
+  majLe: string;
+  progression: number;
+  coursTermines: number;
+  nombreCours: number;
+};
+
 export type Parcours = {
   id: string;
+  nom: string;
+  description: string | null;
+  objectif: string | null;
+  statut: StatutParcours;
+  niveau: NiveauParcours;
+  niveauClasse: 'ParcoursDebutant' | 'ParcoursAvance';
+  /** Libellé OWL historique conservé pour rétrocompatibilité. */
   type: string | null;
+  /** Liste des noms de cours conservée pour rétrocompatibilité. */
   cours: string[];
+  coursIds: string[];
+  etapes: ParcoursEtape[];
+  nombreCours: number;
+  dureeHeures: number;
+  dureeTotale: string;
+  competences: string[];
+  competencesDetails: ParcoursCompetenceDetail[];
+  prerequis: string[];
+  prerequisEntree: string[];
+  formateurs: string[];
+  nombreInscrits: number;
+  estInscrit?: boolean;
+  dateInscription?: string | null;
+  statutInscription?: string;
+  progression?: number | null;
+  coursTermines?: number;
+  coursEnCours?: number;
+  estTermine?: boolean;
+  prochainCours?: ProchainCoursParcours | null;
+  certificationsLiees?: ParcoursCertificationLiee[];
+  inscrits?: ParcoursInscrit[];
+};
+
+export type ParcoursAlerte = {
+  type: 'parcours_vide' | 'cours_orphelin' | 'ordre_invalide' | 'lacune_competence' | 'coherence_niveau';
+  severite: 'erreur' | 'avertissement' | 'info';
+  message: string;
+  coursId: string | null;
+};
+
+export type ParcoursSuggestionCours = {
+  coursId: string;
+  coursNom: string;
+  duree: string;
+  raison: string;
+};
+
+export type ParcoursPrerequisEntreeAnalyse = {
+  id: string;
+  description: string;
+  competence: string | null;
+  pourCours: string;
+};
+
+export type ParcoursAnalyse = {
+  parcoursId: string;
+  nom: string;
+  niveau: NiveauParcours;
+  valide: boolean;
+  scoreCoherence: number;
+  ordreActuel: string[];
+  ordreActuelNoms?: string[];
+  ordreSuggere: string[];
+  ordreSuggereNoms: string[];
+  ameliorationOrdre: boolean;
+  prerequisEntree: ParcoursPrerequisEntreeAnalyse[];
+  competencesCouvertes: string[];
+  alertes: ParcoursAlerte[];
+  suggestionsCours: ParcoursSuggestionCours[];
+};
+
+export type ParcoursRecommandation = Parcours & {
+  scorePertinence: number;
+  raisons: string[];
+  competencesNouvelles: string[];
+  prerequisCouverts: boolean;
+};
+
+export type ParcoursStatistiques = {
+  totalParcours: number;
+  parNiveau: {
+    Debutant: number;
+    Avance: number;
+  };
+  parStatut: {
+    publie: number;
+    brouillon: number;
+  };
+  moyenneCoursParParcours: number;
+  moyenneHeuresParParcours: number;
+  totalInscriptions: number;
+  progressionMoyenne: number;
+  tauxCompletionGlobal: number;
+  topParcours: {
+    id: string;
+    nom: string;
+    niveau: NiveauParcours;
+    statut: StatutParcours;
+    nombreInscrits: number;
+    nombreCours: number;
+    dureeHeures: number;
+    progressionMoyenne: number;
+  }[];
+  coursPartages: {
+    coursId: string;
+    coursNom: string;
+    nombreParcours: number;
+    parcours: string[];
+  }[];
 };
 
 export type Evaluation = {

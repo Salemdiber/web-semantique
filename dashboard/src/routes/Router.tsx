@@ -17,6 +17,7 @@ const Error = Loadable(lazy(() => import('../views/authentication/Error')));
 // Modules du projet
 const Accueil = Loadable(lazy(() => import('../views/dashboards/Modern')));
 const Education = Loadable(lazy(() => import('../views/education/Education')));
+const Parcours = Loadable(lazy(() => import('../views/parcours/Parcours')));
 const Utilisateurs = Loadable(lazy(() => import('../views/users/Users')));
 const Evaluations = Loadable(lazy(() => import('../views/evaluations/Evaluations')));
 
@@ -31,6 +32,8 @@ const Router = [
     children: [
       { path: '/', element: <Accueil /> },
       { path: '/education', element: <Education /> },
+      { path: '/parcours', element: <Parcours /> },
+      { path: '/parcours/:id', element: <Parcours /> },
       { path: '/evaluations', element: <Evaluations /> },
       {
         path: '/utilisateurs',

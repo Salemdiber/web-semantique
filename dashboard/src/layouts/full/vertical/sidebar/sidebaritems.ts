@@ -52,6 +52,13 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: "Parcours d'apprentissage",
+        icon: 'solar:routing-2-linear',
+        url: '/parcours',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: 'Évaluations & Certifications',
         icon: 'solar:medal-ribbon-star-linear',
         url: '/evaluations',

@@ -1,5 +1,5 @@
 /**
- * Session partagée entre la landing (3010) et le dashboard (5173).
+ * Session partagée entre la landing (3001) et le dashboard (5173).
  *
  * Le dashboard copie son jeton dans un cookie SameSite=Lax ; les cookies ne
  * dépendent pas du port, donc la landing peut vérifier la session auprès de
@@ -21,7 +21,7 @@ export interface UtilisateurSession {
     role: Role;
 }
 
-const lireCookie = (): string | null => {
+export const lireJetonSession = (): string | null => {
     const brut = document.cookie
         .split('; ')
         .find((entree) => entree.startsWith(`${CLE_COOKIE}=`));
@@ -33,24 +33,28 @@ export const useSession = () => {
     const [utilisateur, setUtilisateur] = useState<UtilisateurSession | null>(
         null
     );
+    const [jeton, setJeton] = useState<string | null>(null);
     const [chargement, setChargement] = useState(true);
 
     useEffect(() => {
-        const jeton = lireCookie();
-        if (!jeton) {
+        const jetonLu = lireJetonSession();
+        if (!jetonLu) {
             setChargement(false);
             return;
         }
 
         let actif = true;
         fetch(`${API_URL}/auth/moi`, {
-            headers: { Authorization: `Bearer ${jeton}` },
+            headers: { Authorization: `Bearer ${jetonLu}` },
         })
             .then((reponse) =>
                 reponse.ok ? reponse.json() : null
             )
             .then((profil: UtilisateurSession | null) => {
-                if (actif) setUtilisateur(profil);
+                if (actif) {
+                    setUtilisateur(profil);
+                    setJeton(profil ? jetonLu : null);
+                }
             })
             .catch(() => {
                 /* API indisponible : on garde l'état visiteur */
@@ -66,5 +70,5 @@ export const useSession = () => {
 
     const prenom = utilisateur?.nom?.trim().split(/\s+/)[0] ?? '';
 
-    return { utilisateur, chargement, prenom };
+    return { utilisateur, jeton, chargement, prenom };
 };

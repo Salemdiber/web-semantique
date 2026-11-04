@@ -1,0 +1,260 @@
+================================================================================
+PROJECT INFORMATION — SI EDUCATION (SEMANTIC WEB E-LEARNING PLATFORM)
+================================================================================
+
+1. GENERAL OVERVIEW
+--------------------------------------------------------------------------------
+Project Name : SI Education — Semantic Web Education & Training Platform
+Domain       : E-Learning, Learning Paths, Academic Programs, Skills, Evaluations
+               & Certifications
+Core Concept : Full-stack Semantic Web application whose course catalog, guided
+               learning paths (`ParcoursApprentissage`), actors, pedagogical
+               programs, evaluations, and certifications are driven by an OWL 2
+               Ontology authored in Protege (`education_formation_protege.owl`),
+               stored in Apache Jena Fuseki with active OWL inference, and
+               exposed through a FastAPI REST + SPARQL backend to two React/Vite
+               web interfaces.
+
+
+2. SYSTEM ARCHITECTURE & SERVICES
+--------------------------------------------------------------------------------
+  [ Landing Front-Office ]        [ Back-Office Dashboard ]
+     React 19 + Vite 7               React 19 + Vite 7
+     http://localhost:3001           http://localhost:5173
+               \                           /
+                \                         /  REST JSON + Bearer Auth
+                 v                       v   (Shared cookie `si-education-session`)
+            [ FastAPI Semantic Backend (Python) ]
+                    http://localhost:8000
+                     /                 \
+     SPARQL Query & /                   \ sqlite3 (stdlib)
+     SPARQL Update /                     \
+                  v                       v
+      [ Apache Jena Fuseki ]      [ SQLite Database ]
+        TDB2 + OWL Reasoner         utilisateurs.db
+       http://localhost:3030     (Users, Quizzes & Path Order/Enrollments)
+
+Tech Stack Summary:
+- Front-Office (Landing) : React 19, TypeScript, Vite 7, Tailwind CSS v4, Axios
+- Back-Office (Admin/App): React 19, TypeScript, Vite 7, Tailwind CSS v4,
+                           Radix UI, TanStack Table v8, ApexCharts
+- Backend API            : Python 3, FastAPI, Uvicorn, SPARQLWrapper, Pydantic v2
+- Semantic Triplestore   : Apache Jena Fuseki (Docker `stain/jena-fuseki:latest`)
+- Ontology Modeling      : OWL / RDF-XML (Protege), Namespace:
+                           `http://example.org/education-formation#` (`edu:`)
+- Operational DB         : SQLite 3 (`backend/data/utilisateurs.db`)
+
+
+3. PROJECT DIRECTORY STRUCTURE
+--------------------------------------------------------------------------------
+web-semantique/
+|-- education_formation_protege.owl   # Source OWL ontology (classes, properties, individuals)
+|-- docker-compose.yml                # Docker service definition for Apache Jena Fuseki
+|-- start-all.ps1                     # Detached launcher for Fuseki + API + both frontends
+|-- INTEGRATION.md                    # Technical semantic integration guide
+|-- README.md                         # Quickstart & architecture overview
+|-- project_info.txt                  # Complete project documentation (this file)
+|-- package.json / vite.config.ts     # Front-office Landing configuration (port 3001)
+|
+|-- fuseki/
+|   `-- config.ttl                    # Fuseki service "education": TDB2 + OWLFBRuleReasoner
+|
+|-- src/                              # Front-office Landing Page (React/Vite, port 3001)
+|   |-- App.tsx                       # Main routing (`/`, `/parcours`, `/parcours/:id`)
+|   |-- utils/session.ts              # Shared session reader (`si-education-session` cookie)
+|   `-- app/
+|       |-- utils/parcoursApi.ts      # Typed client for `/api/education/parcours*`
+|       |-- components/Home/
+|       |   |-- Hero/                 # Landing hero banner
+|       |   |-- CoursesOntology/      # Live course catalog fetched from OWL via FastAPI
+|       |   |-- Parcours/             # Guided learning paths catalog & roadmap modal
+|       |   `-- Mentor/               # Instructors showcase
+|       |-- components/Layout/        # Header (session-aware link & Parcours anchor) & Footer
+|       `-- pages/                    # Home, ParcoursPage, NotFound, Signin, Signup
+|
+|-- dashboard/                        # Back-office & Learner Portal (React/Vite, port 5173)
+|   `-- src/
+|       |-- routes/Router.tsx         # Protected routes (`RequireAuth` + role guards)
+|       |-- views/dashboards/         # Overview dashboard (`/`)
+|       |-- views/education/          # Ontology explorer, stats, OWL reasoner check (`/education`)
+|       |-- views/parcours/           # Learning paths module (`/parcours`, `/parcours/:id`)
+|       |-- components/parcours/      # Admin CRUD/TanStack/ApexCharts/Analysis & Student Portal
+|       |-- views/evaluations/        # Evaluations, Quizzes & Certifications (`/evaluations`)
+|       |-- views/users/              # User & role administration (`/utilisateurs`, admin only)
+|       `-- views/authentication/     # Login & Registration (`/auth/auth2/login`, `/register`)
+|
+|-- backend/                          # FastAPI Python Backend (port 8000)
+|   |-- requirements.txt              # Python dependencies
+|   |-- data/
+|   |   |-- utilisateurs.db           # SQLite database (accounts, quizzes, path order & enrollments)
+|   |   `-- .secret                   # Persisted HMAC signing key for Bearer tokens
+|   |-- scripts/
+|   |   |-- setup_dataset.py          # Initializes Fuseki dataset, loads OWL, seeds path order, verifies reasoner
+|   |   `-- exporter_utilisateurs_owl.py # Exports SQLite users into the OWL file
+|   `-- app/
+|       |-- main.py                   # FastAPI app entrypoint & lifespan initialization
+|       |-- config.py                 # Environment & default settings
+|       |-- sparql_client.py          # SPARQLWrapper client for Jena Fuseki
+|       |-- queries.py                # Central SPARQL SELECT queries mapped to OWL schema
+|       |-- ontologie_ecriture.py     # SPARQL UPDATE helpers & escaping for OWL CRUD
+|       |-- ontologie_sync.py         # Syncs SQLite users -> Fuseki OWL individuals
+|       |-- export_owl.py             # Thread-safe persistence of users, parcours & suitCours to `.owl`
+|       |-- parcours_stockage.py      # SQLite persistence for course ordering & student enrollments
+|       |-- db.py                     # SQLite user CRUD & initial admin seeding
+|       |-- quiz.py                   # SQLite quiz questions & auto-graded attempts
+|       |-- security.py               # Password hashing & HMAC Bearer token management
+|       `-- routers/
+|           |-- auth.py               # `/api/auth/*` (login, register, user management)
+|           |-- parcours.py           # `/api/education/parcours*` (CRUD, coherence, progress, recommendations)
+|           |-- education.py          # `/api/education/*` (read endpoints & reasoner stats)
+|           |-- gestion.py            # `/api/education/*` (CRUD evaluations & certifications)
+|           |-- quiz.py               # `/api/education/quiz/*` (quiz authoring & taking)
+|           `-- ontologie.py          # `/api/ontologie/*` (OWL reload/upload & graph chains)
+|
+`-- .logs/                            # Runtime logs (api, frontend, dashboard)
+
+
+4. DATABASES USED IN THE PROJECT (HYBRID ARCHITECTURE)
+--------------------------------------------------------------------------------
+The platform uses TWO complementary databases:
+
+A) Primary Semantic Database: Apache Jena Fuseki (TDB2 + OWL Inference)
+   - Image / Port : `stain/jena-fuseki:latest` on `http://localhost:3030`
+   - Dataset Name : `education` (configured in `fuseki/config.ttl`)
+   - Storage      : Apache Jena TDB2 persistent triple store located at
+                    `/fuseki/databases/education` (Docker volume `fuseki-data`).
+   - OWL Reasoner : `http://jena.hpl.hp.com/2003/OWLFBRuleReasoner` (`ja:InfModel`)
+                    mounted as the default graph over the TDB2 base model.
+                    Enables automatic RDFS/OWL subclass deduction (e.g.,
+                    `ParcoursDebutant` and `ParcoursAvance` individuals are
+                    deduced as `edu:ParcoursApprentissage`; `Examen` and `Quiz`
+                    are deduced as `edu:Evaluation`).
+   - Stored Data  : All domain entities, semantic relationships, course catalog,
+                    prerequisites, skills, programs, learning paths (`Parcours_Web`,
+                    `Parcours_Data`, `Parcours_FullStack`), instructors, students,
+                    evaluations, grades (`noteObtenue`), and certifications
+                    (~1,772 RDF triples including inferred triples).
+
+B) Secondary Relational Database: SQLite (`backend/data/utilisateurs.db`)
+   - Engine       : Python built-in `sqlite3` (zero external DB server needed).
+   - Tables       :
+     1. `utilisateurs`          : User accounts, password hashes, roles, active flag.
+     2. `quiz_questions`        : Multiple-choice questions linked to an OWL `Quiz` ID.
+     3. `quiz_tentatives`       : Student quiz submissions, chosen answers, and scores.
+     4. `parcours_cours_ordre`  : Ordered sequence `(parcours_id, cours_id, position)`
+                                  complementing `edu:contientCoursParcours` (which
+                                  remains the semantic membership truth in OWL).
+     5. `parcours_inscriptions` : Student enrollments `(utilisateur_id, parcours_id,
+                                  statut, cree_le, maj_le)`.
+     6. `parcours_cours_suivis` : Tracks `edu:suitCours` triples added automatically
+                                  upon path enrollment so unenrollment/deletion is
+                                  cleanly reversible without touching unrelated courses.
+
+C) Automatic Synchronization Between SQLite, Fuseki, and `.owl`
+   - User Sync (`ontologie_sync.py` + `export_owl.py`):
+     Maintains `edu:compte_<id>` in Fuseki and `education_formation_protege.owl`
+     while preserving existing `<suitCours>`, `<suitFormation>`, and
+     `<obtientCertification>` links.
+   - Learning Path Sync (`routers/parcours.py` + `export_owl.py`):
+     Every admin create/update/reorder/duplicate/delete updates Fuseki via SPARQL
+     UPDATE, reconciles `parcours_cours_ordre` in SQLite, and atomically writes all
+     `ParcoursDebutant`/`ParcoursAvance` individuals back to `education_formation_protege.owl`.
+   - Enrollment `suitCours` Sync:
+     Enrolling in a path adds `edu:suitCours` on the student's first uncompleted
+     course in Fuseki + `.owl`; unenrolling removes it if no other active path uses it.
+
+
+5. USER ROLES & PERMISSIONS (RBAC)
+--------------------------------------------------------------------------------
+Authentication uses signed Bearer tokens (`Authorization: Bearer <token>`,
+shared between `:3001` and `:5173` via the `si-education-session` cookie).
+
+1) `admin` (Administrator — default: `admin@si-education.tn` / `Admin@123`)
+   - Full access to `/`, `/education`, `/parcours`, `/evaluations`, `/utilisateurs`.
+   - Learning Paths (`/parcours`): full CRUD, course sequence reordering,
+     duplication as draft, deletion with impact analysis, pedagogical coherence
+     analysis with 1-click topological sort, and ApexCharts analytics.
+   - Full CRUD on Users, OWL Evaluations, Quizzes, Certifications, and OWL reloads.
+
+2) `formateur` (Instructor / Trainer)
+   - Access to `/`, `/education`, `/parcours` (read-only table, roadmap detail,
+     coherence analysis & statistics), and `/evaluations` (full CRUD on
+     evaluations, quiz questionnaires, and certifications).
+
+3) `etudiant` (Student / Learner)
+   - Front-Office (`:3001`) & Learner Portal (`:5173/parcours`, `/evaluations`):
+     browse published learning paths, enroll/unenroll, track derived per-course
+     and global progress (`non_commence` / `en_cours` / `termine` computed from
+     validated OWL evaluations), receive personalized path recommendations with
+     explanations, and pass auto-graded quizzes.
+
+4) Unauthenticated Visitor
+   - Read-only access to published courses and learning paths on `:3001` (with
+     redirect to login when clicking "S'inscrire").
+
+
+6. ENTITIES & DATA MODEL (LEARNING PATHS FOCUS)
+--------------------------------------------------------------------------------
+- OWL Hierarchy:
+  `edu:ParcoursApprentissage`
+    |-- `edu:ParcoursDebutant` ("Parcours Débutant")
+    `-- `edu:ParcoursAvance`   ("Parcours Avancé")
+- OWL Object Property:
+  `edu:contientCoursParcours` (`ParcoursApprentissage -> Cours`)
+- OWL Data Properties (`xsd:string`):
+  `edu:nomParcours` (required, unique case-insensitive)
+  `edu:descriptionParcours`
+  `edu:objectifParcours`
+  `edu:statutParcours` (`brouillon` | `publie`)
+- Seeded Learning Paths:
+  1. `Parcours_Data`      (`ParcoursDebutant`, `publie`) : `Python` (30h)
+  2. `Parcours_Web`       (`ParcoursDebutant`, `publie`) : `JavaScript` -> `Angular` (55h)
+  3. `Parcours_FullStack` (`ParcoursAvance`, `publie`)   : `Python` -> `JavaScript` -> `Angular` (85h)
+
+
+7. MAIN API ENDPOINTS (`/api`)
+--------------------------------------------------------------------------------
+Learning Paths (`/api/education/parcours`):
+- `GET    /api/education/parcours`                     : Filtered/sorted list + aggregates
+- `POST   /api/education/parcours`                     : Create path (admin)
+- `GET    /api/education/parcours/mes-parcours`        : Enrolled paths & derived progress (etudiant)
+- `GET    /api/education/parcours/recommandations`     : Personalized path recommendations (etudiant)
+- `GET    /api/education/parcours/statistiques`        : Analytics & shared courses (admin/formateur)
+- `GET    /api/education/parcours/proprietes-owl`      : OWL property declarations
+- `GET    /api/education/parcours/{id}`                : Full path detail, ordered steps, enrollees/progress
+- `PUT    /api/education/parcours/{id}`                : Update metadata, status & OWL level class (admin)
+- `PUT    /api/education/parcours/{id}/cours`          : Replace/reorder full course sequence (admin)
+- `POST   /api/education/parcours/{id}/cours`          : Insert single course at position (admin)
+- `DELETE /api/education/parcours/{id}/cours/{coursId}`: Remove single course from path (admin)
+- `POST   /api/education/parcours/{id}/dupliquer`      : Duplicate path as draft (admin)
+- `DELETE /api/education/parcours/{id}`                : Delete path from Fuseki, `.owl` & SQLite (admin)
+- `GET    /api/education/parcours/{id}/analyse`        : Coherence analysis & Kahn topological sort
+- `POST   /api/education/parcours/{id}/inscription`    : Enroll student & sync `suitCours` (etudiant)
+- `DELETE /api/education/parcours/{id}/inscription`    : Unenroll student & clean `suitCours` (etudiant)
+
+Other Core Endpoints:
+- Auth & Users : `/api/auth/inscription`, `/connexion`, `/moi`, `/utilisateurs`, `/synchroniser`
+- Education    : `/api/education/sante`, `/cours`, `/etudiants`, `/formateurs`, `/formations`,
+                 `/competences`, `/programmes`, `/statistiques`, `/hierarchie`, `/types-inferes`
+- Assessments  : `/api/education/evaluations`, `/mes-evaluations`, `/certifications`, `/quiz/{id}...`
+- Ontology     : `/api/ontologie/charger`, `/televerser`, `/prerequis-competences`
+
+
+8. RUNNING THE PROJECT & DEFAULT CREDENTIALS
+--------------------------------------------------------------------------------
+Quick Start (Windows PowerShell from `web-semantique/`):
+  .\start-all.ps1
+
+Reload Ontology & Seed Learning Paths Order:
+  .\backend\.venv\Scripts\python.exe .\backend\scripts\setup_dataset.py
+
+Service URLs:
+- Front-Office Landing : http://localhost:3001
+- Back-Office Portal   : http://localhost:5173/parcours
+- FastAPI Swagger UI   : http://localhost:8000/docs
+- Apache Jena Fuseki   : http://localhost:3030
+
+Default Credentials:
+- Back-Office Admin    : `admin@si-education.tn` / `Admin@123`
+- Jena Fuseki Admin UI : `admin` / `admin`
+================================================================================
