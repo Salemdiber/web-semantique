@@ -1,0 +1,18 @@
+   ▲ Next.js 15.2.4 (Turbopack)
+   - Local:        http://localhost:3010
+   - Network:      http://172.20.16.1:3010
+
+ ✓ Starting...
+ ✓ Ready in 6.9s
+ ○ Compiling / ...
+ ✓ Compiled / in 26.7s
+ GET / 200 in 27852ms
+ GET / 200 in 461ms
+ GET / 200 in 454ms
+ GET / 200 in 449ms
+ GET / 200 in 449ms
+ GET / 200 in 501ms
+ GET / 200 in 484ms
+ GET / 200 in 415ms
+ GET / 200 in 460ms
+[?25h

@@ -1,0 +1,63 @@
+<div class="topbar">
+  <div class="container topbar__inner">
+    <div class="topbar__contact">
+      <a class="topbar__phone" href="tel:+21655333100" aria-label="Appelez Mercan Voyages au +216 55 333 100">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.5.56 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17.9 17.9 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .56 3.5 1 1 0 0 1-.25 1Z"/></svg>
+        <span>+216 55 333 100</span>
+      </a>
+      <a class="topbar__email" href="mailto:mercan.voyage@gmail.com" aria-label="Envoyer un e-mail à mercan.voyage@gmail.com">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm9 7.2L20.2 7H3.8ZM3 9.1V17h18V9.1l-8.4 5.6a1 1 0 0 1-1.2 0Z"/></svg>
+        <span>mercan.voyage@gmail.com</span>
+      </a>
+    </div>
+    <div class="topbar__links">
+      <a class="social-link" href="https://www.facebook.com/mercan.voyage" target="_blank" rel="noopener noreferrer" aria-label="Mercan Voyages sur Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8h3.4Z"/></svg>
+      </a>
+      <% if (user) { %>
+        <a class="topbar__account-link" href="<%= user.role === 'admin' ? '/admin' : '/mon-compte' %>"><%= user.name %></a>
+        <a class="topbar__account-link" href="/parametres-compte">Paramètres du compte</a>
+        <button class="link-button topbar__account-link" type="button" data-logout>Se déconnecter</button>
+      <% } else { %>
+        <a class="topbar__account-link" href="/connexion">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0H5Zm14.5-11.5H22v2h-2.5V13h-2v-2.5H15v-2h2.5V6h2Z"/></svg>
+          <span>Se connecter</span>
+        </a>
+        <a class="topbar__account-link" href="/inscription">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0H5Zm14.5-13.5h2v6h-2Zm-2 2h6v2h-6Z"/></svg>
+          <span>S’inscrire</span>
+        </a>
+      <% } %>
+    </div>
+  </div>
+</div>
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="Mercan Voyages, accueil">
+      <img src="/images/mercan.jpg" width="72" height="72" alt="Mercan Voyages">
+    </a>
+    <button class="navbar-toggler menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation" aria-expanded="false" aria-controls="main-navigation" aria-label="Ouvrir le menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse main-nav" id="main-navigation">
+      <div class="navbar-nav align-items-lg-center gap-lg-2">
+      <a class="nav-link" href="/" <%= currentPath === '/' ? 'aria-current="page"' : '' %>>Accueil</a>
+      <a class="nav-link" href="/hotels" <%= currentPath.startsWith('/hotels') ? 'aria-current="page"' : '' %>>Hôtels</a>
+      <div class="nav-dropdown nav-item">
+        <a href="/vol" class="nav-link nav-dropdown__trigger" <%= currentPath === '/vol' ? 'aria-current="page"' : '' %>>Vol <span aria-hidden="true">⌄</span></a>
+        <div class="nav-dropdown__menu dropdown-menu">
+          <a href="/vol?compagnie=nouvelair">Nouvelair</a>
+          <a href="/vol">Formulaire de vol</a>
+        </div>
+      </div>
+      <a class="nav-link" href="/voyages" <%= currentPath === '/voyages' ? 'aria-current="page"' : '' %>>Voyages</a>
+      <a class="nav-link" href="/tours" <%= currentPath === '/tours' ? 'aria-current="page"' : '' %>>Tours</a>
+      <a class="nav-link" href="/omra" <%= currentPath === '/omra' ? 'aria-current="page"' : '' %>>Omra</a>
+      <a class="nav-link" href="/contact" <%= currentPath === '/contact' ? 'aria-current="page"' : '' %>>Contact</a>
+      </div>
+    </div>
+  </div>
+  </nav>
+</header>
+<main id="main-content">
