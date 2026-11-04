@@ -9,10 +9,10 @@ import { LIBELLES_ROLE } from 'src/api/auth/auth-data';
 
 const CARTES = [
   { classe: 'Cours', libelle: 'Cours', icone: 'solar:book-bookmark-linear', couleur: 'bg-lightprimary text-primary' },
+  { classe: 'ParcoursApprentissage', libelle: "Parcours d'apprentissage", icone: 'solar:routing-2-linear', couleur: 'bg-lightinfo text-info' },
   { classe: 'Etudiant', libelle: 'Étudiants', icone: 'solar:users-group-rounded-linear', couleur: 'bg-lightsuccess text-success' },
   { classe: 'Formateur', libelle: 'Formateurs', icone: 'solar:user-id-linear', couleur: 'bg-lightsecondary text-secondary' },
   { classe: 'Certification', libelle: 'Certifications', icone: 'solar:diploma-verified-linear', couleur: 'bg-lightwarning text-warning' },
-  { classe: 'Formation', libelle: 'Formations', icone: 'solar:case-round-linear', couleur: 'bg-lightinfo text-info' },
   { classe: 'Competence', libelle: 'Compétences', icone: 'solar:lightbulb-bolt-linear', couleur: 'bg-lighterror text-error' },
 ];
 
@@ -140,11 +140,33 @@ const Accueil = () => {
             </p>
             <div className="flex flex-col gap-3">
               <Link
+                to="/parcours"
+                className="flex items-center gap-3 rounded-md border border-ld px-4 py-3 hover:bg-lightprimary transition-colors"
+              >
+                <Icon icon="solar:routing-2-linear" height={20} width={20} className="text-primary" />
+                <span className="text-sm font-medium">
+                  {utilisateur?.role === 'etudiant'
+                    ? "Mes parcours d'apprentissage"
+                    : "Gestion des parcours d'apprentissage"}
+                </span>
+              </Link>
+              <Link
                 to="/education"
                 className="flex items-center gap-3 rounded-md border border-ld px-4 py-3 hover:bg-lightprimary transition-colors"
               >
                 <Icon icon="solar:graph-outline" height={20} width={20} className="text-primary" />
                 <span className="text-sm font-medium">Ontologie Éducation</span>
+              </Link>
+              <Link
+                to="/evaluations"
+                className="flex items-center gap-3 rounded-md border border-ld px-4 py-3 hover:bg-lightprimary transition-colors"
+              >
+                <Icon icon="solar:medal-ribbon-star-linear" height={20} width={20} className="text-primary" />
+                <span className="text-sm font-medium">
+                  {utilisateur?.role === 'etudiant'
+                    ? 'Mes évaluations & quiz'
+                    : 'Évaluations & Certifications'}
+                </span>
               </Link>
               {estAdmin && (
                 <Link

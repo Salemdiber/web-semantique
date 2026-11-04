@@ -20,6 +20,7 @@ PROJECT_ROOT = BASE_DIR.parent                          # racine du projet
 sys.path.insert(0, str(BASE_DIR))
 
 from app import config  # noqa: E402
+from app import parcours_stockage  # noqa: E402
 
 PREFIXE = """PREFIX edu: <http://example.org/education-formation#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -52,7 +53,7 @@ def creer_dataset() -> None:
         timeout=60,
     )
     if r.status_code not in (201, 200):
-        print(f"Création dataset : HTTP {r.status_code} — {r.text}")
+        print(f"Création dataset : HTTP {r.status_code} - {r.text}")
 
 
 def charger_owl(chemin: Path) -> None:
@@ -71,7 +72,7 @@ def charger_owl(chemin: Path) -> None:
         timeout=120,
     )
     if r.status_code not in (200, 201, 204):
-        raise SystemExit(f"Échec PUT data : {r.status_code} — {r.text[:400]}")
+        raise SystemExit(f"Échec PUT data : {r.status_code} - {r.text[:400]}")
     print(f"OK Ontologie chargée ({chemin.name}) dans /{config.FUSEKI_DATASET}")
 
 
@@ -95,13 +96,39 @@ def verifier() -> None:
     # 3) avec rdfs:subClassOf* (c'est la vérité même sans raisonneur)
     chemin = compter(PREFIXE + 'SELECT (COUNT(DISTINCT ?x) AS ?n) '
                                    'WHERE { ?x rdf:type/rdfs:subClassOf* edu:Evaluation }')
-    print(f"Individus Évaluation — rdf:type direct : {direct}, "
+    print(f"Individus Évaluation - rdf:type direct : {direct}, "
           f"rdfs:subClassOf* : {chemin}")
     if direct >= chemin and chemin > 0:
-        print("✅ Raisonneur OWL actif : rdf:type direct retrouve aussi les individus des sous-classes (Examen, Quiz).")
+        print("[OK] Raisonneur OWL actif : rdf:type direct retrouve aussi les individus des sous-classes (Examen, Quiz).")
     else:
-        print("⚠️ Raisonneur OWL inactif — vérifier que fuseki/config.ttl est bien "
+        print("[WARN] Raisonneur OWL inactif - vérifier que fuseki/config.ttl est bien "
               "monté et redémarrer : docker compose restart")
+
+    # 4) Vérification dédiée ParcoursApprentissage (ParcoursDebutant / ParcoursAvance)
+    parcours_direct = compter(
+        PREFIXE
+        + "SELECT (COUNT(DISTINCT ?p) AS ?n) "
+        + "WHERE { ?p rdf:type edu:ParcoursApprentissage }"
+    )
+    parcours_arbre = compter(
+        PREFIXE
+        + "SELECT (COUNT(DISTINCT ?p) AS ?n) "
+        + "WHERE { ?p rdf:type/rdfs:subClassOf* edu:ParcoursApprentissage }"
+    )
+    parcours_avec_cours = compter(
+        PREFIXE
+        + "SELECT (COUNT(DISTINCT ?p) AS ?n) "
+        + "WHERE { ?p rdf:type/rdfs:subClassOf* edu:ParcoursApprentissage ; "
+        + "edu:contientCoursParcours ?c }"
+    )
+    print(
+        f"Individus ParcoursApprentissage - rdf:type direct : {parcours_direct}, "
+        f"rdfs:subClassOf* : {parcours_arbre}, avec cours : {parcours_avec_cours}"
+    )
+    if parcours_direct >= parcours_arbre and parcours_arbre >= 3:
+        print("[OK] Parcours d'apprentissage initialisés et inférés via OWLFBRuleReasoner.")
+    else:
+        print("[WARN] Vérification parcours incomplète - vérifier le fichier OWL chargé.")
 
 
 def compter(query: str) -> int:
@@ -145,6 +172,8 @@ def main() -> None:
         print(f"Service /{config.FUSEKI_DATASET} disponible.")
 
     charger_owl(chemin)
+    parcours_stockage.initialiser()
+    print("[OK] Ordre des cours et tables SQLite des parcours initialisés.")
     verifier()
 
 

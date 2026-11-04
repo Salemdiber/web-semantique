@@ -20,7 +20,6 @@ from app.queries import (
     FORMATEURS,
     FORMATIONS,
     HIERARCHIE,
-    PARCOURS,
     PROGRAMMES,
     STATISTIQUES,
     evaluations_etudiant,
@@ -144,18 +143,6 @@ async def lister_programmes() -> list[dict[str, Any]]:
             "formations": split(r.get("formations")),
         }
         for r in exec_(PROGRAMMES)
-    ]
-
-
-@router.get("/parcours", summary="Lister les parcours d'apprentissage")
-async def lister_parcours() -> list[dict[str, Any]]:
-    return [
-        {
-            "id": r["parcours"],
-            "type": r.get("typeLabel"),
-            "cours": split(r.get("cours")),
-        }
-        for r in exec_(PARCOURS)
     ]
 
 

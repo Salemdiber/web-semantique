@@ -10,6 +10,7 @@ const DASHBOARD_URL: string =
 const NAVIGATION = [
     { label: 'Accueil', href: '/#Home' },
     { label: 'Cours', href: '/#catalogue-ontologie' },
+    { label: 'Parcours', href: '/#parcours-section' },
     { label: 'Formateurs', href: '/#mentors-section' },
 ]
 

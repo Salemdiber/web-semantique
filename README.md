@@ -1,8 +1,6 @@
 # Si Educational Free ReactJS Landing Page Template
 
-> 🧠 **Intégration sémantique** : le catalogue des cours (front + back-office) est
-> alimenté par l'ontologie OWL Éducation & Formation via FastAPI + SPARQL + Apache
-> Jena Fuseki. Voir [`INTEGRATION.md`](./INTEGRATION.md).
+> 🧠 **Intégration sémantique** : le catalogue des cours et le module **Gestion des parcours d'apprentissage** (`edu:ParcoursApprentissage`, front-office `:3001` + back-office `:5173`) sont alimentés par l'ontologie OWL Éducation & Formation via FastAPI + SPARQL + Apache Jena Fuseki (`OWLFBRuleReasoner`) et SQLite. Voir [`INTEGRATION.md`](./INTEGRATION.md) et [`project_info.txt`](./project_info.txt).
 
 #### Preview
 
@@ -13,24 +11,15 @@
 
 ## Getting Started
 
-1. Clone Repository
+1. Start the full semantic stack (Fuseki + FastAPI + Landing + Dashboard on Windows):
+```powershell
+.\start-all.ps1
 ```
-git clone https://github.com/themewagon/si-education.git
-```
-2. Install Dependencies
-```
-npm i
-```
-3. Run the development server:
+2. Or install and run the Landing development server standalone:
 
 ```bash
+npm i
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 ## Author 
@@ -43,4 +32,3 @@ Design and code is completely written by GetNextJs Templates.com and development
  - Design and Code is Copyright &copy; [GetNextJs Templates.com](https://adminmart.com/)
  - Licensed cover under [MIT]
  - Distributed by [ThemeWagon](https://themewagon.com)
-

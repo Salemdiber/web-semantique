@@ -9,16 +9,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import config, db
+from app import parcours_stockage
 from app import quiz as stockage_quiz
-from app.routers import auth, education, gestion, ontologie
+from app.routers import auth, education, gestion, ontologie, parcours
 from app.routers import quiz as routeur_quiz
 
 
 @asynccontextmanager
 async def cycle_de_vie(_: FastAPI):
-    """Prépare la base des comptes et le compte administrateur initial."""
+    """Prépare les tables SQLite (comptes, quiz, parcours) et l'administrateur initial."""
     db.initialiser()
     stockage_quiz.initialiser()
+    parcours_stockage.initialiser()
     yield
 
 
@@ -28,9 +30,10 @@ app = FastAPI(
         "API REST construite sur le serveur Apache Jena Fuseki. "
         "Les données proviennent de l'ontologie OWL (Protégé) interrogée "
         "en SPARQL : cours, formations, étudiants, formateurs, compétences, "
-        "prérequis, évaluations, certifications, programmes et parcours."
+        "prérequis, évaluations, certifications, programmes et parcours "
+        "d'apprentissage."
     ),
-    version="1.0.0",
+    version="1.1.0",
     lifespan=cycle_de_vie,
 )
 
@@ -42,6 +45,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# `parcours.router` est monté avant `education.router` pour la priorité de `/education/parcours/*`
+app.include_router(parcours.router, prefix=config.API_PREFIX)
 app.include_router(education.router, prefix=config.API_PREFIX)
 app.include_router(gestion.router, prefix=config.API_PREFIX)
 app.include_router(routeur_quiz.router, prefix=config.API_PREFIX)

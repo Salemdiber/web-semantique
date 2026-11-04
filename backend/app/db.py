@@ -14,6 +14,7 @@ from app import config
 from app.security import hasher_mot_de_passe
 
 ROLES = ("admin", "formateur", "etudiant")
+
 ROLES_INSCRIPTION = ("formateur", "etudiant")
 
 SCHEMA = """

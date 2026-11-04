@@ -9,8 +9,9 @@ Propriétés objet du fichier OWL :
 Propriétés données :
     anneeProgramme, descriptionCours, descriptionFormation, descriptionPrerequis,
     dureeCours, dureeFormation, niveau, niveauCompetence, niveauRequis,
-    nomCertification, nomCompetence, nomCours, nomFormation, nomProgramme,
-    organisme, prenom
+    descriptionParcours, nomCertification, nomCompetence, nomCours,
+    nomFormation, nomParcours, nomProgramme, objectifParcours, organisme,
+    prenom, statutParcours
 """
 
 PREFIXE = """PREFIX edu: <http://example.org/education-formation#>
@@ -172,21 +173,71 @@ ORDER BY ?nom
 
 # ----------------------------------------------------- Parcours d'apprentissage ---
 PARCOURS = PREFIXE + """
-SELECT ?parcours ?typeLabel
+SELECT ?parcours ?nom ?label ?description ?objectif ?statut ?typedirect ?typeLabel
+       (GROUP_CONCAT(DISTINCT COALESCE(?crsStr, ""); separator="|") AS ?coursIds)
        (GROUP_CONCAT(DISTINCT COALESCE(?coursNom, ""); separator="|") AS ?cours)
 WHERE {
     ?parcours rdf:type/rdfs:subClassOf* edu:ParcoursApprentissage .
+    OPTIONAL { ?parcours edu:nomParcours ?nom }
+    OPTIONAL { ?parcours rdfs:label ?label }
+    OPTIONAL { ?parcours edu:descriptionParcours ?description }
+    OPTIONAL { ?parcours edu:objectifParcours ?objectif }
+    OPTIONAL { ?parcours edu:statutParcours ?statut }
     OPTIONAL {
         ?parcours rdf:type ?typedirect .
         ?typedirect rdfs:subClassOf edu:ParcoursApprentissage .
-        ?typedirect rdfs:label ?typeLabel .
+        FILTER (?typedirect != edu:ParcoursApprentissage)
+        OPTIONAL { ?typedirect rdfs:label ?typeLabel }
     }
     OPTIONAL {
-        ?parcours edu:contientCoursParcours ?crs.
-        ?crs edu:nomCours ?coursNom .
+        ?parcours edu:contientCoursParcours ?crs .
+        BIND (STR(?crs) AS ?crsStr)
+        OPTIONAL { ?crs edu:nomCours ?coursNom }
     }
 }
-GROUP BY ?parcours ?typeLabel
+GROUP BY ?parcours ?nom ?label ?description ?objectif ?statut ?typedirect ?typeLabel
+ORDER BY ?parcours
+"""
+
+# Métadonnées détaillées des cours pour les parcours, l'analyse de cohérence et le tri topologique
+COURS_GRAPHE_PARCOURS = PREFIXE + """
+SELECT ?cours ?nom ?duree ?description ?typeLabel
+       ?pre ?prerequisNom ?prerequisNiveau ?preComp ?preCompNom ?preCompNiveau
+       ?comp ?compNom ?compNiveau
+       ?formateur ?formateurNom ?formateurDomaine
+WHERE {
+    ?cours rdf:type/rdfs:subClassOf* edu:Cours .
+    ?cours edu:nomCours ?nom .
+    OPTIONAL { ?cours edu:dureeCours ?duree }
+    OPTIONAL { ?cours edu:descriptionCours ?description }
+    OPTIONAL {
+        ?cours rdf:type ?typedirect .
+        ?typedirect rdfs:subClassOf edu:Cours .
+        FILTER (?typedirect != edu:Cours)
+        OPTIONAL { ?typedirect rdfs:label ?typeLabel }
+    }
+    OPTIONAL {
+        ?cours edu:aPourPrerequis ?pre .
+        OPTIONAL { ?pre edu:descriptionPrerequis ?prerequisNom }
+        OPTIONAL { ?pre edu:niveauRequis ?prerequisNiveau }
+        OPTIONAL {
+            ?pre edu:necessiteCompetence ?preComp .
+            OPTIONAL { ?preComp edu:nomCompetence ?preCompNom }
+            OPTIONAL { ?preComp edu:niveauCompetence ?preCompNiveau }
+        }
+    }
+    OPTIONAL {
+        ?cours edu:developpeCompetence ?comp .
+        OPTIONAL { ?comp edu:nomCompetence ?compNom }
+        OPTIONAL { ?comp edu:niveauCompetence ?compNiveau }
+    }
+    OPTIONAL {
+        ?formateur edu:enseigne ?cours .
+        OPTIONAL { ?formateur edu:prenom ?formateurNom }
+        OPTIONAL { ?formateur edu:descriptionFormation ?formateurDomaine }
+    }
+}
+ORDER BY ?nom
 """
 
 # -------------------------------------------------------- Évaluations ---
@@ -346,4 +397,19 @@ WHERE {
     }
 }
 ORDER BY ?classeParente ?labelSousClasse
+"""
+
+
+# ------------------------------------ Propriétés OWL des parcours ---
+PROPRIETES_PARCOURS = PREFIXE + """
+SELECT ?propriete ?typeProp ?label ?domaine ?portee
+WHERE {
+    VALUES ?typeProp { owl:ObjectProperty owl:DatatypeProperty }
+    ?propriete rdf:type ?typeProp ;
+               rdfs:domain edu:ParcoursApprentissage .
+    OPTIONAL { ?propriete rdfs:label ?label }
+    OPTIONAL { ?propriete rdfs:domain ?domaine }
+    OPTIONAL { ?propriete rdfs:range ?portee }
+}
+ORDER BY ?propriete
 """
