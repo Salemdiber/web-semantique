@@ -1,0 +1,30 @@
+
+  [32m[1mVITE[22m v7.1.12[39m  [2mready in [0m[1m2596[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m2:57:14 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx, /src/components/evaluations/GestionCertifications.tsx, /src/views/dashboards/Modern.tsx, /src/components/education/OntologieStatistiques.tsx, /src/components/education/RelationsOntologie.tsx, /src/components/education/CatalogueOntologie.tsx, /src/components/education/OntologieRaisonneur.tsx[22m
+[2m2:57:20 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m2:57:20 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m2:57:24 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m2:57:31 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m2:57:41 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m2:57:46 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m2:57:46 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m2:57:51 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m2:57:51 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m2:57:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m2:57:56 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/layouts/full/vertical/sidebar/Sidebar.tsx[22m
+[2m3:00:13 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:00:13 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:01:06 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx, /src/components/evaluations/GestionCertifications.tsx, /src/views/dashboards/Modern.tsx, /src/components/education/OntologieStatistiques.tsx, /src/components/education/RelationsOntologie.tsx, /src/components/education/CatalogueOntologie.tsx, /src/components/education/OntologieRaisonneur.tsx[22m
+[2m3:01:06 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionCertifications.tsx[22m
+[2m3:11:44 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css[22m
+[2m3:11:52 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx, /src/components/evaluations/GestionCertifications.tsx, /src/views/dashboards/Modern.tsx, /src/components/education/OntologieStatistiques.tsx, /src/components/education/RelationsOntologie.tsx, /src/components/education/CatalogueOntologie.tsx, /src/components/education/OntologieRaisonneur.tsx[22m
+[2m3:11:52 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx, /src/components/evaluations/GestionCertifications.tsx, /src/views/dashboards/Modern.tsx, /src/components/education/OntologieStatistiques.tsx, /src/components/education/RelationsOntologie.tsx, /src/components/education/CatalogueOntologie.tsx, /src/components/education/OntologieRaisonneur.tsx[22m
+[2m3:12:34 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:12:34 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:12:39 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:12:39 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:12:43 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
+[2m3:12:45 AM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/css/globals.css, /src/components/evaluations/GestionEvaluations.tsx[22m
