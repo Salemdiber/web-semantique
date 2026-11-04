@@ -52,6 +52,13 @@ const SidebarContent: MenuItem[] = [
       },
       {
         id: uniqueId(),
+        name: 'Gestion des cours',
+        icon: 'solar:notebook-linear',
+        url: '/cours',
+        isPro: false,
+      },
+      {
+        id: uniqueId(),
         name: "Parcours d'apprentissage",
         icon: 'solar:routing-2-linear',
         url: '/parcours',

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
 import { useSession } from '@/utils/session'
 
 const API_URL: string = import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api'
@@ -58,11 +57,11 @@ const Banner = () => {
                         </p>
 
                         <div className='flex flex-wrap justify-center gap-3 pt-2'>
-                            <Link
-                                to='/#catalogue-ontologie'
+                            <a
+                                href='#catalogue-ontologie'
                                 className='bg-primary text-white font-semibold px-6 py-3 rounded-lg border border-primary hover:bg-transparent hover:text-primary duration-300'>
                                 Explorer les cours
-                            </Link>
+                            </a>
                             {!chargement &&
                                 (utilisateur ? (
                                     <a
